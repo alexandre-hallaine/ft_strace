@@ -5,6 +5,9 @@
 #include <sys/ptrace.h>
 #include <sys/wait.h>
 #include <sys/user.h>
+#include <sys/uio.h>
+
+#include <linux/elf.h>
 
 int wait_for_syscall(pid_t child) {
     int status;
@@ -21,12 +24,16 @@ int wait_for_syscall(pid_t child) {
 
 void enter_syscall(pid_t child_pid) {
     struct user_regs_struct regs;
-    ptrace(PTRACE_GETREGS, child_pid, NULL, &regs);
+    struct iovec io = { &regs, sizeof(regs) };
+
+    ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io);
     printf("syscall(%lld)", regs.orig_rax);
 }
 
 void exit_syscall(pid_t child_pid) {
     struct user_regs_struct regs;
-    ptrace(PTRACE_GETREGS, child_pid, NULL, &regs);
+    struct iovec io = { &regs, sizeof(regs) };
+
+    ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io);
     printf(" = %lld\n", regs.rax);
 }

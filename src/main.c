@@ -6,7 +6,6 @@
 
 #include <sys/ptrace.h>
 #include <sys/wait.h>
-#include <sys/user.h>
 
 int child(char *file, char *argv[])
 {
