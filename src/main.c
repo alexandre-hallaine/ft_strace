@@ -1,3 +1,5 @@
+#include "functions.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -6,17 +8,10 @@
 #include <sys/wait.h>
 #include <sys/user.h>
 
-int wait_for_syscall(pid_t child) {
-    int status;
-    while (1) {
-        ptrace(PTRACE_SYSCALL, child, NULL, NULL);
-        waitpid(child, &status, 0);
-
-        if (WIFSTOPPED(status) && WSTOPSIG(status) & (SIGTRAP | 0x80))
-            return 0;
-        if (WIFEXITED(status))
-            return 1;
-    }
+int child(char *file, char *argv[])
+{
+    kill(getpid(), SIGSTOP);
+    return execvp(file, argv);
 }
 
 int main(int argc, char *argv[]) {
@@ -25,31 +20,22 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    pid_t child = fork();
-    if (child == 0)
-        return execvp(argv[1], argv + 1);
+    pid_t child_pid = fork();
+    if (child_pid == 0)
+        return child(argv[1], argv + 1);
 
-    ptrace(PTRACE_SEIZE, child, NULL, NULL);
-    ptrace(PTRACE_INTERRUPT, child, NULL, NULL);
-    waitpid(child, NULL, 0);
+    ptrace(PTRACE_SEIZE, child_pid, NULL, NULL);
+    waitpid(child_pid, NULL, 0);
 
-    struct user_regs_struct regs;
-    ptrace(PTRACE_SETOPTIONS, child, NULL, PTRACE_O_TRACESYSGOOD);
+    ptrace(PTRACE_SETOPTIONS, child_pid, NULL, PTRACE_O_TRACESYSGOOD);
     while (1) {
-        if (wait_for_syscall(child) != 0)
-            break;
-
-        // Get the system call number
-        ptrace(PTRACE_GETREGS, child, NULL, &regs);
-        printf("syscall(%lld)", regs.orig_rax);
-
-        if (wait_for_syscall(child) != 0)
-            break;
-
-        // Get the return value of the system call
-        ptrace(PTRACE_GETREGS, child, NULL, &regs);
-        printf(" = %lld\n", regs.rax);
+        if (wait_for_syscall(child_pid) != 0) break;
+        enter_syscall(child_pid);
+        if (wait_for_syscall(child_pid) != 0) break;
+        exit_syscall(child_pid);
     }
 
-    return 0;
+    siginfo_t info;
+    ptrace(PTRACE_GETSIGINFO, child_pid, NULL, &info);
+    printf("\nStopped by signal %d\n", info.si_signo);
 }
