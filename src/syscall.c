@@ -1,3 +1,5 @@
+#include "types.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -8,6 +10,8 @@
 #include <sys/uio.h>
 
 #include <linux/elf.h>
+
+t_syscall x64_syscalls[] = X64_SYSCALLS;
 
 int wait_for_syscall(pid_t child) {
     int status;
@@ -22,18 +26,19 @@ int wait_for_syscall(pid_t child) {
     }
 }
 
-void enter_syscall(pid_t child_pid) {
+struct user_regs_struct get_regs(pid_t child_pid) {
     struct user_regs_struct regs;
     struct iovec io = { &regs, sizeof(regs) };
-
     ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io);
-    printf("syscall(%lld)", regs.orig_rax);
+    return regs;
 }
 
-void exit_syscall(pid_t child_pid) {
-    struct user_regs_struct regs;
-    struct iovec io = { &regs, sizeof(regs) };
+void print_syscall(struct user_regs_struct *before, struct user_regs_struct *after) {
+    t_syscall *syscall = x64_syscalls + before->orig_rax;
+    printf("%s()", syscall->name);
 
-    ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io);
-    printf(" = %lld\n", regs.rax);
+    if (after)
+        printf(" = %lld\n", after->rax);
+    else
+        printf(" = ?\n");
 }

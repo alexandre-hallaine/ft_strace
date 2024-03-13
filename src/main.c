@@ -25,16 +25,23 @@ int main(int argc, char *argv[]) {
 
     ptrace(PTRACE_SEIZE, child_pid, NULL, NULL);
     waitpid(child_pid, NULL, 0);
-
     ptrace(PTRACE_SETOPTIONS, child_pid, NULL, PTRACE_O_TRACESYSGOOD);
-    while (1) {
-        if (wait_for_syscall(child_pid) != 0) break;
-        enter_syscall(child_pid);
-        if (wait_for_syscall(child_pid) != 0) break;
-        exit_syscall(child_pid);
+
+    struct user_regs_struct regs[2];
+    for (int index = 0;; index = 0) {
+        if (wait_for_syscall(child_pid) == 0)
+            regs[index++] = get_regs(child_pid);
+        if (wait_for_syscall(child_pid) == 0)
+            regs[index++] = get_regs(child_pid);
+
+        if (index == 1)
+            print_syscall(regs, NULL);
+        if (index == 2)
+            print_syscall(regs, regs + 1);
+        else break;
     }
 
     siginfo_t info;
     ptrace(PTRACE_GETSIGINFO, child_pid, NULL, &info);
-    printf("\nStopped by signal %d\n", info.si_signo);
+    printf("+++ exited with %d +++\n", info.si_status);
 }
