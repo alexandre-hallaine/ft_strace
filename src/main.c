@@ -9,7 +9,7 @@
 
 int child(char *file, char *argv[])
 {
-    kill(getpid(), SIGSTOP);
+    kill(getpid(), SIGSTOP); // make an interupt
     return execvp(file, argv);
 }
 
@@ -23,16 +23,16 @@ int main(int argc, char *argv[]) {
     if (child_pid == 0)
         return child(argv[1], argv + 1);
 
-    ptrace(PTRACE_SEIZE, child_pid, NULL, NULL);
-    waitpid(child_pid, NULL, 0);
+    ptrace(PTRACE_SEIZE, child_pid, NULL, NULL); // take control of the child
+    waitpid(child_pid, NULL, 0); // wait the kill
     ptrace(PTRACE_SETOPTIONS, child_pid, NULL, PTRACE_O_TRACESYSGOOD);
 
     struct user_regs_struct regs[2];
     for (int index = 0;; index = 0) {
         if (wait_for_syscall(child_pid) == 0)
-            regs[index++] = get_regs(child_pid);
+            regs[index++] = get_regs(child_pid); // syscall entry
         if (wait_for_syscall(child_pid) == 0)
-            regs[index++] = get_regs(child_pid);
+            regs[index++] = get_regs(child_pid); // syscall exit
 
         if (index == 1)
             print_syscall(regs, NULL);

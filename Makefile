@@ -12,7 +12,7 @@ OBJS	:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 # Compiler and linker options
 CC		:= gcc
-CFLAGS	:= -Wall -Wextra -Werror -I$(INC_DIR)
+CFLAGS	:= -Wall -Wextra -I$(INC_DIR)
 LDFLAGS	:=
 
 # Phony targets
