@@ -34,18 +34,10 @@ struct user_regs_struct get_regs(pid_t child_pid) {
 }
 
 void print_syscall_args(t_syscall *syscall, void *args[]) {
-    if (syscall->args[0] == NONE)
-        printf("NULL");
-    else
-    {
-        int i = 0;
-        do {
-            print_value(syscall->args[i], args[i]);
-            if (i < 6 - 1 && syscall->args[++i])
-                printf(", ");
-            else
-                break;
-        } while (1);
+    for (int i = 0; syscall->args[i]; i++) {
+        if (i > 0)
+            printf(", ");
+        print_value(syscall->args[i], args[i]);
     }
 }
 
@@ -53,7 +45,6 @@ void print_syscall(struct user_regs_struct *before, struct user_regs_struct *aft
     t_syscall *syscall = x64_syscalls + before->orig_rax;
 
     printf("%s(", syscall->name);
-    fflush(stdout);
     print_syscall_args(syscall, (void *[]){ &before->rdi, &before->rsi, &before->rdx, &before->r10, &before->r8, &before->r9 });
     printf(") = ");
     if (after)

@@ -30,7 +30,7 @@ extract_syscall_prototype() {
 # Function to generate the syscall table content for a given architecture
 generate_syscall_table() {
     bit_version=$1
-    output_file="syscalls_${bit_version}.h"
+    output_file="${bit_version}.h"
     syscall_header=$(get_syscall_header $bit_version)
 
     echo "#pragma once" > "$output_file" 

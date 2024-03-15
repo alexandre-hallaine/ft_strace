@@ -5,22 +5,22 @@
 extern pid_t child_pid;
 
 typedef enum e_type {
-    NONE,
+    UNKNOWN = 0,
 
-    PTR = 1 << 0,
+    PTR,
 
-    CHAR = 1 << 1,
-    STR = 1 << 5,
+    CHAR,
+    STR,
 
-    SHORT = 1 << 2,
-    INT = 1 << 3,
-    LONG = 1 << 4,
+    SHORT,
+    INT,
+    LONG,
 
-    ARRAY = 1 << 6,
+    ARRAY = 1 << 3,
 } t_type;
 
 typedef struct s_syscall {
     char *name;
-    t_type args[6];
+    t_type args[7];
     t_type ret;
 } t_syscall;
