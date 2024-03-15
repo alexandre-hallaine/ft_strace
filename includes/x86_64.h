@@ -3,11 +3,11 @@
 #include "types.h"
 
 #define X64_SYSCALLS { \
-    [0] = { "read", { INT, PTR, INT }, INT }, \
-    [1] = { "write", { INT, PTR, INT }, INT }, \
+    [0] = { "read", { INT, STR, INT }, INT }, \
+    [1] = { "write", { INT, STR, INT }, INT }, \
     [2] = { "open", { STR, INT, INT }, INT }, \
     [3] = { "close", { INT }, INT }, \
-    [9] = { "mmap", { PTR, LONG, LONG, LONG, LONG, PTR }, PTR }, \
+    [9] = { "mmap", { PTR, LONG, LONG, LONG, INT, PTR }, PTR }, \
     [10] = { "mprotect", { PTR, LONG, LONG }, INT }, \
     [11] = { "munmap", { PTR, LONG }, INT }, \
     [12] = { "brk", { PTR }, PTR }, \
@@ -15,11 +15,11 @@
     [14] = { "rt_sigprocmask", { INT, PTR, PTR, INT }, INT }, \
     [15] = { "rt_sigreturn", { PTR }, INT }, \
     [16] = { "ioctl", { INT, INT, PTR }, INT }, \
-    [17] = { "pread64", { INT, PTR, INT, LONG }, INT }, \
+    [17] = { "pread64", { INT, STR, INT, LONG }, INT }, \
     [18] = { "pwrite64", { INT, PTR, INT, LONG }, INT }, \
     [19] = { "readv", { INT, PTR, INT }, INT }, \
     [20] = { "writev", { INT, PTR, INT }, INT }, \
-    [21] = { "access", { PTR, INT }, INT }, \
+    [21] = { "access", { STR, INT }, INT }, \
     [22] = { "pipe", { PTR }, INT }, \
     [23] = { "select", { INT, PTR, PTR, PTR, PTR }, INT }, \
     [24] = { "sched_yield", { NONE }, INT }, \
@@ -255,12 +255,12 @@
     [254] = { "inotify_add_watch", { INT, STR, INT }, INT }, \
     [255] = { "inotify_rm_watch", { INT, INT }, INT }, \
     [256] = { "migrate_pages", { INT, LONG, PTR, PTR }, INT }, \
-    [257] = { "openat", { INT, PTR, INT, INT }, INT }, \
+    [257] = { "openat", { INT, STR, INT, INT }, INT }, \
     [258] = { "mkdirat", { INT, STR, INT }, INT }, \
     [259] = { "mknodat", { INT, STR, INT, INT }, INT }, \
     [260] = { "fchownat", { INT, STR, INT, INT, INT }, INT }, \
     [261] = { "futimesat", { INT, STR, PTR }, INT }, \
-    [262] = { "newfstatat", { INT, PTR, PTR, INT }, INT }, \
+    [262] = { "newfstatat", { INT, STR, PTR, INT }, INT }, \
     [263] = { "unlinkat", { INT, STR, INT }, INT }, \
     [264] = { "renameat", { INT, STR, INT, STR }, INT }, \
     [265] = { "linkat", { INT, STR, INT, STR, INT }, INT }, \
@@ -316,7 +316,7 @@
     [315] = { "sched_getattr", { INT, PTR, INT, INT }, INT }, \
     [316] = { "renameat2", { INT, STR, INT, STR, INT }, INT }, \
     [317] = { "seccomp", { INT, INT, STR }, INT }, \
-    [318] = { "getrandom", { PTR, LONG, INT }, INT }, \
+    [318] = { "getrandom", { STR, LONG, INT }, INT }, \
     [319] = { "memfd_create", { STR, INT }, INT }, \
     [320] = { "kexec_file_load", { INT, INT, INT, STR, INT }, INT }, \
     [321] = { "bpf", { INT, PTR, INT }, INT }, \

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <sys/types.h>
+
+extern pid_t child_pid;
+
 typedef enum e_type {
     NONE,
 

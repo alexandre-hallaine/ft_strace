@@ -7,6 +7,8 @@
 #include <sys/ptrace.h>
 #include <sys/wait.h>
 
+pid_t child_pid = 0;
+
 int child(char *file, char *argv[])
 {
     kill(getpid(), SIGSTOP); // make an interupt
@@ -19,7 +21,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    pid_t child_pid = fork();
+    child_pid = fork();
     if (child_pid == 0)
         return child(argv[1], argv + 1);
 
