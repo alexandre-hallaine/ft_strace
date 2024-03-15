@@ -37,7 +37,7 @@ generate_syscall_table() {
     echo "#include \"types.h\"" >> "$output_file"
 
     echo "" >> "$output_file"
-    echo "#define ${bit_version}_BIT_SYSCALL_TABLE { \\" >> "$output_file"
+    echo "#define SYSCALL_TABLE_${bit_version} { \\" >> "$output_file"
 
     grep -oE '__NR_[a-z0-9_]+\s+[0-9]+' "$syscall_header" | \
         while read -r syscall_line; do
@@ -49,7 +49,7 @@ generate_syscall_table() {
                 prototype="UNKNOWN PROTOTYPE"
             fi 
 
-            echo "/* $prototype */" >> "$output_file"
+            echo "/* $prototype */ \\" >> "$output_file"
             echo "[$syscall_number] = { \"$syscall_name\", { UNKNOWN }, UNKNOWN }, \\" >> "$output_file"
         done
 

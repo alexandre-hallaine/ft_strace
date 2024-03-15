@@ -1,4 +1,5 @@
-#include "x86_64.h"
+#include "syscall/64.h"
+#include "syscall/32.h"
 #include "functions.h"
 
 #include <stdio.h>
@@ -11,7 +12,8 @@
 
 #include <linux/elf.h>
 
-t_syscall x64_syscalls[] = X64_SYSCALLS;
+t_syscall syscall_64[] = SYSCALL_TABLE_64;
+t_syscall syscall_32[] = SYSCALL_TABLE_32;
 
 int wait_for_syscall(pid_t child) {
     int status;
@@ -42,7 +44,7 @@ void print_syscall_args(t_syscall *syscall, void *args[]) {
 }
 
 void print_syscall(struct user_regs_struct *before, struct user_regs_struct *after) {
-    t_syscall *syscall = x64_syscalls + before->orig_rax;
+    t_syscall *syscall = syscall_64 + before->orig_rax;
 
     printf("%s(", syscall->name);
     print_syscall_args(syscall, (void *[]){ &before->rdi, &before->rsi, &before->rdx, &before->r10, &before->r8, &before->r9 });
