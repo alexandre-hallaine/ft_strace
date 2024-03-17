@@ -39,21 +39,24 @@ generate_syscall_table() {
     echo "" >> "$output_file"
     echo "#define SYSCALL_TABLE_${bit_version} { \\" >> "$output_file"
 
-    grep -oE '__NR_[a-z0-9_]+\s+[0-9]+' "$syscall_header" | \
-        while read -r syscall_line; do
-            syscall_name=$(echo "$syscall_line" | awk '{print $1}' | sed 's/__NR_//')
-            syscall_number=$(echo "$syscall_line" | awk '{print $2}')
-            prototype=$(extract_syscall_prototype $syscall_name | sed 's/\/\*.*\*\///g')
-            
-            if [[ -z "$prototype" ]]; then
-                prototype="UNKNOWN PROTOTYPE"
-            fi 
+    while read -r syscall_line; do
+        syscall_name=$(echo "$syscall_line" | awk '{print $1}' | sed 's/__NR_//')
+        syscall_number=$(echo "$syscall_line" | awk '{print $2}')
+        prototype=$(extract_syscall_prototype $syscall_name | sed 's/\/\*.*\*\///g')
 
-            echo "/* $prototype */ \\" >> "$output_file"
-            echo "[$syscall_number] = { \"$syscall_name\", { UNKNOWN }, UNKNOWN }, \\" >> "$output_file"
-        done
+        if [[ -z "$prototype" ]]; then
+            prototype="UNKNOWN PROTOTYPE"
+        fi
+
+        echo "/* $prototype */ \\" >> "$output_file"
+        echo "[$syscall_number] = { \"$syscall_name\", { UNKNOWN }, UNKNOWN }, \\" >> "$output_file"
+    done < <(grep -oE '__NR_[a-z0-9_]+\s+[0-9]+' "$syscall_header")
 
     echo "}" >> "$output_file"
+
+    echo "" >> "$output_file"
+    echo "#define SYSCALL_TABLE_${bit_version}_MAX ${syscall_number}" >> "$output_file"
+
     echo "Syscall table generated: $output_file"
 }
 

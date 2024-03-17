@@ -7,7 +7,7 @@
 #include <sys/ptrace.h>
 #include <sys/wait.h>
 
-pid_t child_pid = 0;
+t_data g_data = {0};
 
 int child(char *file, char *argv[])
 {
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    child_pid = fork();
+    pid_t child_pid = g_data.child_pid = fork();
     if (child_pid == 0)
         return child(argv[1], argv + 1);
 
@@ -29,12 +29,12 @@ int main(int argc, char *argv[]) {
     waitpid(child_pid, NULL, 0); // wait the kill
     ptrace(PTRACE_SETOPTIONS, child_pid, NULL, PTRACE_O_TRACESYSGOOD);
 
-    struct user_regs_struct regs[2];
+    t_regs regs[2];
     for (int index = 0;; index = 0) {
-        if (wait_for_syscall(child_pid) == 0)
-            regs[index++] = get_regs(child_pid); // syscall entry
-        if (wait_for_syscall(child_pid) == 0)
-            regs[index++] = get_regs(child_pid); // syscall exit
+        if (wait_for_syscall() == 0)
+            regs[index++] = get_regs(); // syscall entry
+        if (wait_for_syscall() == 0)
+            regs[index++] = get_regs(); // syscall exit
 
         if (index == 1)
             print_syscall(regs, NULL);

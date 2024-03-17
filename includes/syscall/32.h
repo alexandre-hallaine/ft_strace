@@ -919,3 +919,5 @@ arch_prctl(int code, unsigned long *addr); */ \
 /* UNKNOWN PROTOTYPE */ \
 [448] = { "process_mrelease", { UNKNOWN }, UNKNOWN }, \
 }
+
+#define SYSCALL_TABLE_32_MAX 448

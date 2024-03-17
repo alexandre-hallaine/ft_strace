@@ -762,3 +762,5 @@ openat(int dirfd, const char *pathname, int flags, mode_t mode); */ \
 /* UNKNOWN PROTOTYPE */ \
 [448] = { "process_mrelease", { UNKNOWN }, UNKNOWN }, \
 }
+
+#define SYSCALL_TABLE_64_MAX 448
