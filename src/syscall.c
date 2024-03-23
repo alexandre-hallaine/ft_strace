@@ -30,13 +30,14 @@ int wait_for_syscall() {
 
 // Convert architecture dependent address to valid pointers
 void *to_ptr(long addr, int size) {
+    if (size >= (int)sizeof(long))
+        return (void *) addr;
+
     long convertore = 1;
     convertore <<= size * 8;
     convertore -= 1;
-
-    if (convertore != 0)
-        addr &= convertore;
-    return (void *) addr;
+    
+    return (void *) (addr & convertore);
 }
 
 t_stop get_stop() {
