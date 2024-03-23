@@ -4,8 +4,8 @@
 
 // syscall.c
 int wait_for_syscall();
-t_regs get_regs();
-void print_syscall(t_regs *before, t_regs *after);
+t_stop get_stop();
+void print_syscall(t_stop *before, t_stop *after);
 
 // value.c
 void print_value(t_type type, void *value);

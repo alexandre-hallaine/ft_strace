@@ -34,7 +34,7 @@ void *read_data(void *addr, size_t size) {
         { addr, size },
     };
 
-    ssize_t ret = process_vm_readv(g_data.child_pid, data, 1, data + 1, 1, 0);
+    ssize_t ret = process_vm_readv(child_pid, data, 1, data + 1, 1, 0);
 
     if (ret != -1)
         return data->iov_base;
@@ -69,10 +69,9 @@ void print_type(t_type type, void *value) {
 
 void print_value(t_type type, void *value) {
     if (!(type & ARRAY))
-        return print_type(type, value);
+        return print_type(type, &value);
 
     type &= ~ARRAY;
-    value = *(void **)value;
     unsigned long i = 0;
     printf("[");
 

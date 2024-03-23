@@ -2,17 +2,12 @@
 
 #include <sys/types.h>
 
+extern pid_t child_pid;
+
 typedef enum e_arch {
     ARCH_32,
     ARCH_64,
 } t_arch;
-
-typedef struct s_data {
-    pid_t child_pid;
-    t_arch arch;
-} t_data;
-
-extern t_data g_data;
 
 typedef enum e_type {
     UNKNOWN = 0,
@@ -34,6 +29,13 @@ typedef struct s_syscall {
     t_type args[7];
     t_type ret;
 } t_syscall;
+
+typedef struct s_stop {
+    t_arch arch;
+    t_syscall *syscall;
+    void *args[6];
+    void *ret;
+} t_stop;
 
 struct user_regs_struct_64
 {
@@ -86,8 +88,3 @@ struct user_regs_struct_32
     int esp;
     int xss;
 };
-
-typedef union u_regs {
-    struct user_regs_struct_64 regs_64;
-    struct user_regs_struct_32 regs_32;
-} t_regs;

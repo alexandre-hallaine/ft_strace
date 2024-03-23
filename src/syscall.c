@@ -18,8 +18,8 @@ t_syscall syscall_32[] = SYSCALL_TABLE_32;
 int wait_for_syscall() {
     int status;
     while (1) {
-        ptrace(PTRACE_SYSCALL, g_data.child_pid, NULL, NULL);
-        waitpid(g_data.child_pid, &status, 0);
+        ptrace(PTRACE_SYSCALL, child_pid, NULL, NULL);
+        waitpid(child_pid, &status, 0);
 
         if (WIFSTOPPED(status) && WSTOPSIG(status) & (SIGTRAP | 0x80)) // PTRACE_O_TRACESYSGOOD
             return 0;
@@ -28,46 +28,58 @@ int wait_for_syscall() {
     }
 }
 
-t_regs get_regs() {
-    t_regs regs;
+t_stop get_stop() {
+    union {
+        struct user_regs_struct_64 regs_64;
+        struct user_regs_struct_32 regs_32;
+    } regs;
+
     struct iovec io = { &regs, sizeof(regs) };
+    ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io);
 
-    ptrace(PTRACE_GETREGSET, g_data.child_pid, NT_PRSTATUS, &io);
-    g_data.arch = io.iov_len == sizeof(struct user_regs_struct_64) ? ARCH_64 : ARCH_32;
-
-    return regs;
+    t_stop stop = {0};
+    if (io.iov_len == sizeof(struct user_regs_struct_64)) {
+        stop.arch = ARCH_64;
+        stop.syscall = syscall_64 + regs.regs_64.orig_rax;
+        stop.args[0] = *(void **)&regs.regs_64.rdi;
+        stop.args[1] = *(void **)&regs.regs_64.rsi;
+        stop.args[2] = *(void **)&regs.regs_64.rdx;
+        stop.args[3] = *(void **)&regs.regs_64.r10;
+        stop.args[4] = *(void **)&regs.regs_64.r8;
+        stop.args[5] = *(void **)&regs.regs_64.r9;
+        stop.ret = *(void **)&regs.regs_64.rax;
+    } else {
+        stop.arch = ARCH_32;
+        stop.syscall = syscall_32 + regs.regs_32.orig_eax;
+        stop.args[0] = *(void **)&regs.regs_32.ebx;
+        stop.args[1] = *(void **)&regs.regs_32.ecx;
+        stop.args[2] = *(void **)&regs.regs_32.edx;
+        stop.args[3] = *(void **)&regs.regs_32.esi;
+        stop.args[4] = *(void **)&regs.regs_32.edi;
+        stop.args[5] = *(void **)&regs.regs_32.ebp;
+        stop.ret = *(void **)&regs.regs_32.eax;
+    }
+    return stop;
 }
 
-void print_syscall_algo(t_syscall *syscall, void *args[], void *ret) {
-    printf("%s(", syscall->name);
+void print_syscall(t_stop *before, t_stop *after) {
+    if (after != NULL && before->arch != after->arch)
+        printf("Architecture switched to %s\n", after->arch == ARCH_64 ? "x86_64" : "x86");
 
-    for (int i = 0; syscall->args[i]; i++) {
+    printf("%s(", before->syscall->name);
+
+    for (int i = 0; before->syscall->args[i]; i++) {
         if (i > 0)
             printf(", ");
-        print_value(syscall->args[i], args[i]);
+        print_value(before->syscall->args[i], before->args[i]);
     }
+
     printf(") = ");
 
-    if (ret)
-        print_value(syscall->ret, ret);
+    if (after != NULL)
+        print_value(after->syscall->ret, after->ret);
     else
         printf("?");
 
     printf("\n");
-}
-
-void print_syscall(t_regs *before, t_regs *after) {
-    if (g_data.arch == ARCH_32) {
-        if (before->regs_32.orig_eax > 0 && before->regs_32.orig_eax <= SYSCALL_TABLE_32_MAX)
-            print_syscall_algo(syscall_32 + before->regs_32.orig_eax,
-                                       (void *[]) {&before->regs_32.ebx, &before->regs_32.ecx, &before->regs_32.edx,
-                                                   &before->regs_32.esi, &before->regs_32.edi, &before->regs_32.ebp},
-                                       after == NULL ? NULL : &after->regs_32.eax);
-    } else {
-        if (before->regs_64.orig_rax > 0 && before->regs_64.orig_rax <= SYSCALL_TABLE_64_MAX)
-            print_syscall_algo(syscall_64 + before->regs_64.orig_rax,
-                                       (void *[]) {&before->regs_64.rdi, &before->regs_64.rsi, &before->regs_64.rdx,
-                                                   &before->regs_64.r10, &before->regs_64.r8, &before->regs_64.r9},
-                                       after == NULL ? NULL : &after->regs_64.rax);
-    }
 }
