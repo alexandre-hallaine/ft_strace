@@ -22,6 +22,14 @@ typedef enum e_type {
     LONG,
 
     ARRAY = 1 << 3,
+
+    MODE = INT,
+    TIME = LONG,
+    DEV = INT,
+    ID = INT,
+    OFF = LONG,
+    CLOCK = INT,
+    SIG_HANDLER = PTR,
 } t_type;
 
 typedef struct s_syscall {

@@ -3,282 +3,259 @@
 
 #define SYSCALL_TABLE_32 { \
 /*        long restart_syscall(void); */ \
-[0] = { "restart_syscall", { UNKNOWN }, UNKNOWN }, \
+[0] = { "restart_syscall", { }, LONG }, \
 /*        void _exit(int status); */ \
-[1] = { "exit", { UNKNOWN }, UNKNOWN }, \
+[1] = { "_exit", { INT } }, \
 /*        pid_t fork(void); */ \
-[2] = { "fork", { UNKNOWN }, UNKNOWN }, \
+[2] = { "fork", { }, ID }, \
 /*        ssize_t read(int fd, void *buf, size_t count); */ \
-[3] = { "read", { UNKNOWN }, UNKNOWN }, \
+[3] = { "read", { INT, PTR, LONG }, LONG }, \
 /*        ssize_t write(int fd, const void *buf, size_t count); */ \
-[4] = { "write", { UNKNOWN }, UNKNOWN }, \
-/*        int open(const char *pathname, int flags);
-       int open(const char *pathname, int flags, mode_t mode);
-       int openat(int dirfd, const char *pathname, int flags);
-       int openat(int dirfd, const char *pathname, int flags, mode_t mode); */ \
-[5] = { "open", { UNKNOWN }, UNKNOWN }, \
+[4] = { "write", { INT, PTR, LONG }, LONG }, \
+/*        int open(const char *pathname, int flags, mode_t mode); */ \
+[5] = { "open", { STR, INT, MODE }, INT }, \
 /*        int close(int fd); */ \
-[6] = { "close", { UNKNOWN }, UNKNOWN }, \
+[6] = { "close", { INT }, INT }, \
 /*        pid_t waitpid(pid_t pid, int *wstatus, int options); */ \
-[7] = { "waitpid", { UNKNOWN }, UNKNOWN }, \
+[7] = { "waitpid", { ID, PTR, INT }, ID }, \
 /*        int creat(const char *pathname, mode_t mode); */ \
-[8] = { "creat", { UNKNOWN }, UNKNOWN }, \
+[8] = { "creat", { STR, MODE }, INT }, \
 /*        int link(const char *oldpath, const char *newpath); */ \
-[9] = { "link", { UNKNOWN }, UNKNOWN }, \
-/*        int unlink(const char *pathname);
-       int unlinkat(int dirfd, const char *pathname, int flags); */ \
-[10] = { "unlink", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[11] = { "execve", { UNKNOWN }, UNKNOWN }, \
-/*        int chdir(const char *path);
-       int fchdir(int fd); */ \
-[12] = { "chdir", { UNKNOWN }, UNKNOWN }, \
+[9] = { "link", { STR, STR }, INT }, \
+/*        int unlink(const char *pathname); */ \
+[10] = { "unlink", { STR }, INT }, \
+/* int execve(const char *pathname, char *const argv[], char *const envp[]) */ \
+[11] = { "execve", { STR, ARRAY | STR, ARRAY | STR }, INT }, \
+/*        int chdir(const char *path); */ \
+[12] = { "chdir", { STR }, INT }, \
 /*        time_t time(time_t *tloc); */ \
-[13] = { "time", { UNKNOWN }, UNKNOWN }, \
-/*        int mknod(const char *pathname, mode_t mode, dev_t dev);
-       int mknodat(int dirfd, const char *pathname, mode_t mode, dev_t dev); */ \
-[14] = { "mknod", { UNKNOWN }, UNKNOWN }, \
-/*        int chmod(const char *pathname, mode_t mode);
-       int fchmod(int fd, mode_t mode);
-       int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags); */ \
-[15] = { "chmod", { UNKNOWN }, UNKNOWN }, \
+[13] = { "time", { PTR }, TIME }, \
+/*        int mknod(const char *pathname, mode_t mode, dev_t dev); */ \
+[14] = { "mknod", { STR, MODE, DEV }, INT }, \
+/*        int chmod(const char *pathname, mode_t mode); */ \
+[15] = { "chmod", { STR, MODE }, INT }, \
 /*        int lchown(const char *pathname, uid_t owner, gid_t group); */ \
-[16] = { "lchown", { UNKNOWN }, UNKNOWN }, \
+[16] = { "lchown", { STR, ID, ID }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [17] = { "break", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [18] = { "oldstat", { UNKNOWN }, UNKNOWN }, \
 /*        off_t lseek(int fd, off_t offset, int whence); */ \
-[19] = { "lseek", { UNKNOWN }, UNKNOWN }, \
+[19] = { "lseek", { INT, OFF, INT }, OFF }, \
 /*        pid_t getpid(void); */ \
-[20] = { "getpid", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[21] = { "mount", { UNKNOWN }, UNKNOWN }, \
+[20] = { "getpid", { }, ID }, \
+/*        int mount(const char *source, const char *target, const char *filesystemtype, unsigned long mountflags, const void *data); */ \
+[21] = { "mount", { STR, STR, STR, LONG, PTR }, INT }, \
 /*        int umount(const char *target); */ \
-[22] = { "umount", { UNKNOWN }, UNKNOWN }, \
+[22] = { "umount", { STR }, INT }, \
 /*        int setuid(uid_t uid); */ \
-[23] = { "setuid", { UNKNOWN }, UNKNOWN }, \
+[23] = { "setuid", { ID }, INT }, \
 /*        uid_t getuid(void); */ \
-[24] = { "getuid", { UNKNOWN }, UNKNOWN }, \
+[24] = { "getuid", { }, ID }, \
 /*        int stime(const time_t *t); */ \
-[25] = { "stime", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[26] = { "ptrace", { UNKNOWN }, UNKNOWN }, \
+[25] = { "stime", { PTR }, INT }, \
+/*        long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data); */ \
+[26] = { "ptrace", { INT, ID, PTR, PTR }, LONG }, \
 /*        unsigned int alarm(unsigned int seconds); */ \
-[27] = { "alarm", { UNKNOWN }, UNKNOWN }, \
+[27] = { "alarm", { INT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [28] = { "oldfstat", { UNKNOWN }, UNKNOWN }, \
 /*        int pause(void); */ \
-[29] = { "pause", { UNKNOWN }, UNKNOWN }, \
-/*        int utime(const char *filename, const struct utimbuf *times);
-       int utimes(const char *filename, const struct timeval times[2]); */ \
-[30] = { "utime", { UNKNOWN }, UNKNOWN }, \
+[29] = { "pause", { }, INT }, \
+/*        int utime(const char *filename, const struct utimbuf *times); */ \
+[30] = { "utime", { STR, PTR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [31] = { "stty", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [32] = { "gtty", { UNKNOWN }, UNKNOWN }, \
-/*        int access(const char *pathname, int mode);
-       int faccessat(int dirfd, const char *pathname, int mode, int flags); */ \
-[33] = { "access", { UNKNOWN }, UNKNOWN }, \
+/*        int access(const char *pathname, int mode); */ \
+[33] = { "access", { STR, INT }, INT }, \
 /*        int nice(int inc); */ \
-[34] = { "nice", { UNKNOWN }, UNKNOWN }, \
+[34] = { "nice", { INT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [35] = { "ftime", { UNKNOWN }, UNKNOWN }, \
-/*        void sync(void);
-       int syncfs(int fd); */ \
-[36] = { "sync", { UNKNOWN }, UNKNOWN }, \
+/*        void sync(void); */ \
+[36] = { "sync", { }, }, \
 /*        int kill(pid_t pid, int sig); */ \
-[37] = { "kill", { UNKNOWN }, UNKNOWN }, \
+[37] = { "kill", { ID, INT }, INT }, \
 /*        int rename(const char *oldpath, const char *newpath); */ \
-[38] = { "rename", { UNKNOWN }, UNKNOWN }, \
-/*        int mkdir(const char *pathname, mode_t mode);
-       int mkdirat(int dirfd, const char *pathname, mode_t mode); */ \
-[39] = { "mkdir", { UNKNOWN }, UNKNOWN }, \
+[38] = { "rename", { STR, STR }, INT }, \
+/*        int mkdir(const char *pathname, mode_t mode); */ \
+[39] = { "mkdir", { STR, MODE }, INT }, \
 /*        int rmdir(const char *pathname); */ \
-[40] = { "rmdir", { UNKNOWN }, UNKNOWN }, \
+[40] = { "rmdir", { STR }, INT }, \
 /*        int dup(int oldfd); */ \
-[41] = { "dup", { UNKNOWN }, UNKNOWN }, \
-/*        struct fd_pair pipe();
-       int pipe(int pipefd[2]); */ \
-[42] = { "pipe", { UNKNOWN }, UNKNOWN }, \
+[41] = { "dup", { INT }, INT }, \
+/*        int pipe(int pipefd[2]); */ \
+[42] = { "pipe", { ARRAY | INT }, INT }, \
 /*        clock_t times(struct tms *buf); */ \
-[43] = { "times", { UNKNOWN }, UNKNOWN }, \
+[43] = { "times", { PTR }, CLOCK }, \
 /* UNKNOWN PROTOTYPE */ \
 [44] = { "prof", { UNKNOWN }, UNKNOWN }, \
-/*        int brk(void *addr);
-       void *sbrk(intptr_t increment); */ \
-[45] = { "brk", { UNKNOWN }, UNKNOWN }, \
+/*        int brk(void *addr); */ \
+[45] = { "brk", { PTR }, INT }, \
 /*        int setgid(gid_t gid); */ \
-[46] = { "setgid", { UNKNOWN }, UNKNOWN }, \
+[46] = { "setgid", { ID }, INT }, \
 /*        gid_t getgid(void); */ \
-[47] = { "getgid", { UNKNOWN }, UNKNOWN }, \
+[47] = { "getgid", { }, ID }, \
 /*        sighandler_t signal(int signum, sighandler_t handler); */ \
-[48] = { "signal", { UNKNOWN }, UNKNOWN }, \
+[48] = { "signal", { INT, SIG_HANDLER }, SIG_HANDLER }, \
 /*        uid_t geteuid(void); */ \
-[49] = { "geteuid", { UNKNOWN }, UNKNOWN }, \
+[49] = { "geteuid", { }, ID }, \
 /*        gid_t getegid(void); */ \
-[50] = { "getegid", { UNKNOWN }, UNKNOWN }, \
+[50] = { "getegid", { }, ID }, \
 /*        int acct(const char *filename); */ \
-[51] = { "acct", { UNKNOWN }, UNKNOWN }, \
+[51] = { "acct", { STR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [52] = { "umount2", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [53] = { "lock", { UNKNOWN }, UNKNOWN }, \
 /*        int ioctl(int fd, unsigned long request, ...); */ \
-[54] = { "ioctl", { UNKNOWN }, UNKNOWN }, \
+[54] = { "ioctl", { INT, LONG, UNKNOWN }, INT }, \
 /*        int fcntl(int fd, int cmd, ...  ); */ \
-[55] = { "fcntl", { UNKNOWN }, UNKNOWN }, \
+[55] = { "fcntl", { INT, INT, UNKNOWN }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [56] = { "mpx", { UNKNOWN }, UNKNOWN }, \
 /*        int setpgid(pid_t pid, pid_t pgid); */ \
-[57] = { "setpgid", { UNKNOWN }, UNKNOWN }, \
+[57] = { "setpgid", { ID, ID }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [58] = { "ulimit", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [59] = { "oldolduname", { UNKNOWN }, UNKNOWN }, \
 /*        mode_t umask(mode_t mask); */ \
-[60] = { "umask", { UNKNOWN }, UNKNOWN }, \
+[60] = { "umask", { MODE }, MODE }, \
 /*        int chroot(const char *path); */ \
-[61] = { "chroot", { UNKNOWN }, UNKNOWN }, \
+[61] = { "chroot", { STR }, INT }, \
 /*        int ustat(dev_t dev, struct ustat *ubuf); */ \
-[62] = { "ustat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[63] = { "dup2", { UNKNOWN }, UNKNOWN }, \
+[62] = { "ustat", { DEV, PTR }, INT }, \
+/* int dup2(int oldfd, int newfd); */ \
+[63] = { "dup2", { INT, INT }, INT }, \
 /*        pid_t getppid(void); */ \
-[64] = { "getppid", { UNKNOWN }, UNKNOWN }, \
-/*        pid_t getpgrp(void);                 
-       pid_t getpgrp(pid_t pid);             */ \
-[65] = { "getpgrp", { UNKNOWN }, UNKNOWN }, \
+[64] = { "getppid", { }, ID }, \
+/*        pid_t getpgrp(void); */ \
+[65] = { "getpgrp", { }, ID }, \
 /*        pid_t setsid(void); */ \
-[66] = { "setsid", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[67] = { "sigaction", { UNKNOWN }, UNKNOWN }, \
+[66] = { "setsid", { }, ID }, \
+/*        int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact); */ \
+[67] = { "sigaction", { INT, PTR, PTR }, INT }, \
 /*        long sgetmask(void); */ \
-[68] = { "sgetmask", { UNKNOWN }, UNKNOWN }, \
+[68] = { "sgetmask", { }, LONG }, \
 /*        long ssetmask(long newmask); */ \
-[69] = { "ssetmask", { UNKNOWN }, UNKNOWN }, \
+[69] = { "ssetmask", { LONG }, LONG }, \
 /*        int setreuid(uid_t ruid, uid_t euid); */ \
-[70] = { "setreuid", { UNKNOWN }, UNKNOWN }, \
+[70] = { "setreuid", { ID, ID }, INT }, \
 /*        int setregid(gid_t rgid, gid_t egid); */ \
-[71] = { "setregid", { UNKNOWN }, UNKNOWN }, \
+[71] = { "setregid", { ID, ID }, INT }, \
 /*        int sigsuspend(const sigset_t *mask); */ \
-[72] = { "sigsuspend", { UNKNOWN }, UNKNOWN }, \
+[72] = { "sigsuspend", { PTR }, INT }, \
 /*        int sigpending(sigset_t *set); */ \
-[73] = { "sigpending", { UNKNOWN }, UNKNOWN }, \
+[73] = { "sigpending", { PTR }, INT }, \
 /*        int sethostname(const char *name, size_t len); */ \
-[74] = { "sethostname", { UNKNOWN }, UNKNOWN }, \
+[74] = { "sethostname", { STR, LONG }, INT }, \
 /*        int setrlimit(int resource, const struct rlimit *rlim); */ \
-[75] = { "setrlimit", { UNKNOWN }, UNKNOWN }, \
+[75] = { "setrlimit", { INT, PTR }, INT }, \
 /*        int getrlimit(int resource, struct rlimit *rlim); */ \
-[76] = { "getrlimit", { UNKNOWN }, UNKNOWN }, \
+[76] = { "getrlimit", { INT, PTR }, INT }, \
 /*        int getrusage(int who, struct rusage *usage); */ \
-[77] = { "getrusage", { UNKNOWN }, UNKNOWN }, \
+[77] = { "getrusage", { INT, PTR }, INT }, \
 /*        int gettimeofday(struct timeval *tv, struct timezone *tz); */ \
-[78] = { "gettimeofday", { UNKNOWN }, UNKNOWN }, \
+[78] = { "gettimeofday", { PTR, PTR }, INT }, \
 /*        int settimeofday(const struct timeval *tv, const struct timezone *tz); */ \
-[79] = { "settimeofday", { UNKNOWN }, UNKNOWN }, \
+[79] = { "settimeofday", { PTR, PTR }, INT }, \
 /*        int getgroups(int size, gid_t list[]); */ \
-[80] = { "getgroups", { UNKNOWN }, UNKNOWN }, \
+[80] = { "getgroups", { INT, ARRAY | ID }, INT }, \
 /*        int setgroups(size_t size, const gid_t *list); */ \
-[81] = { "setgroups", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[82] = { "select", { UNKNOWN }, UNKNOWN }, \
-/*        int symlink(const char *target, const char *linkpath);
-       int symlinkat(const char *target, int newdirfd, const char *linkpath); */ \
-[83] = { "symlink", { UNKNOWN }, UNKNOWN }, \
+[81] = { "setgroups", { INT, ARRAY | ID }, INT }, \
+/*        int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout); */ \
+[82] = { "select", { INT, PTR, PTR, PTR, PTR }, INT }, \
+/*        int symlink(const char *target, const char *linkpath); */ \
+[83] = { "symlink", { STR, STR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [84] = { "oldlstat", { UNKNOWN }, UNKNOWN }, \
 /*        ssize_t readlink(const char *pathname, char *buf, size_t bufsiz); */ \
-[85] = { "readlink", { UNKNOWN }, UNKNOWN }, \
+[85] = { "readlink", { STR, STR, LONG }, LONG }, \
 /*        int uselib(const char *library); */ \
-[86] = { "uselib", { UNKNOWN }, UNKNOWN }, \
+[86] = { "uselib", { STR }, INT }, \
 /*        int swapon(const char *path, int swapflags); */ \
-[87] = { "swapon", { UNKNOWN }, UNKNOWN }, \
-/*        int reboot(int magic, int magic2, int cmd, void *arg);
-       int reboot(int cmd); */ \
-[88] = { "reboot", { UNKNOWN }, UNKNOWN }, \
+[87] = { "swapon", { STR, INT }, INT }, \
+/*        int reboot(int magic, int magic2, int cmd, void *arg); */ \
+[88] = { "reboot", { INT, INT, INT, PTR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [89] = { "readdir", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [90] = { "mmap", { UNKNOWN }, UNKNOWN }, \
 /*        int munmap(void *addr, size_t length); */ \
-[91] = { "munmap", { UNKNOWN }, UNKNOWN }, \
-/*        int truncate(const char *path, off_t length);
-       int ftruncate(int fd, off_t length); */ \
-[92] = { "truncate", { UNKNOWN }, UNKNOWN }, \
+[91] = { "munmap", { PTR, LONG }, INT }, \
+/*        int truncate(const char *path, off_t length); */ \
+[92] = { "truncate", { STR, OFF }, INT }, \
 /*        int ftruncate(int fd, off_t length); */ \
-[93] = { "ftruncate", { UNKNOWN }, UNKNOWN }, \
-/*        int fchmod(int fd, mode_t mode);
-       int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags); */ \
-[94] = { "fchmod", { UNKNOWN }, UNKNOWN }, \
+[93] = { "ftruncate", { INT, OFF }, INT }, \
+/*        int fchmod(int fd, mode_t mode); */ \
+[94] = { "fchmod", { INT, MODE }, INT }, \
 /*        int fchown(int fd, uid_t owner, gid_t group); */ \
-[95] = { "fchown", { UNKNOWN }, UNKNOWN }, \
+[95] = { "fchown", { INT, ID, ID }, INT }, \
 /*        int getpriority(int which, id_t who); */ \
-[96] = { "getpriority", { UNKNOWN }, UNKNOWN }, \
+[96] = { "getpriority", { INT, ID }, INT }, \
 /*        int setpriority(int which, id_t who, int prio); */ \
-[97] = { "setpriority", { UNKNOWN }, UNKNOWN }, \
+[97] = { "setpriority", { INT, ID, INT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [98] = { "profil", { UNKNOWN }, UNKNOWN }, \
-/*        int statfs(const char *path, struct statfs *buf);
-       int fstatfs(int fd, struct statfs *buf); */ \
-[99] = { "statfs", { UNKNOWN }, UNKNOWN }, \
+/*        int statfs(const char *path, struct statfs *buf); */ \
+[99] = { "statfs", { STR, PTR }, INT }, \
 /*        int fstatfs(int fd, struct statfs *buf); */ \
-[100] = { "fstatfs", { UNKNOWN }, UNKNOWN }, \
+[100] = { "fstatfs", { INT, PTR }, INT }, \
 /*        int ioperm(unsigned long from, unsigned long num, int turn_on); */ \
-[101] = { "ioperm", { UNKNOWN }, UNKNOWN }, \
+[101] = { "ioperm", { LONG, LONG, INT }, INT }, \
 /*        int socketcall(int call, unsigned long *args); */ \
-[102] = { "socketcall", { UNKNOWN }, UNKNOWN }, \
+[102] = { "socketcall", { INT, PTR }, INT }, \
 /*        int syslog(int type, char *bufp, int len); */ \
-[103] = { "syslog", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[104] = { "setitimer", { UNKNOWN }, UNKNOWN }, \
+[103] = { "syslog", { INT, STR, INT }, INT }, \
+/* int setitimer(int which, const struct itimerval *new_value, struct itimerval *old_value); */ \
+[104] = { "setitimer", { INT, PTR, PTR }, INT }, \
 /*        int getitimer(int which, struct itimerval *curr_value); */ \
-[105] = { "getitimer", { UNKNOWN }, UNKNOWN }, \
-/*        int stat(const char *pathname, struct stat *statbuf);
-       int fstat(int fd, struct stat *statbuf);
-       int lstat(const char *pathname, struct stat *statbuf); */ \
-[106] = { "stat", { UNKNOWN }, UNKNOWN }, \
+[105] = { "getitime", { INT, PTR }, INT }, \
+/*        int stat(const char *pathname, struct stat *statbuf); */ \
+[106] = { "stat", { STR, PTR }, INT }, \
 /*        int lstat(const char *pathname, struct stat *statbuf); */ \
-[107] = { "lstat", { UNKNOWN }, UNKNOWN }, \
+[107] = { "lstat", { STR, PTR }, INT }, \
 /*        int fstat(int fd, struct stat *statbuf); */ \
-[108] = { "fstat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[109] = { "olduname", { UNKNOWN }, UNKNOWN }, \
+[108] = { "fstat", { INT, PTR }, INT }, \
+/*        int uname(struct utsname *buf); */ \
+[109] = { "olduname", { PTR }, INT }, \
 /*        int iopl(int level); */ \
-[110] = { "iopl", { UNKNOWN }, UNKNOWN }, \
+[110] = { "iopl", { INT }, INT }, \
 /*        int vhangup(void); */ \
-[111] = { "vhangup", { UNKNOWN }, UNKNOWN }, \
+[111] = { "vhangup", { }, INT }, \
 /*        int idle(void); */ \
-[112] = { "idle", { UNKNOWN }, UNKNOWN }, \
+[112] = { "idle", { }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [113] = { "vm86old", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[114] = { "wait4", { UNKNOWN }, UNKNOWN }, \
+/*        pid_t wait4(pid_t pid, int *wstatus, int options, struct rusage *rusage); */ \
+[114] = { "wait4", { ID, PTR, INT, PTR }, ID }, \
 /*        int swapoff(const char *path); */ \
-[115] = { "swapoff", { UNKNOWN }, UNKNOWN }, \
+[115] = { "swapoff", { STR }, INT }, \
 /*        int sysinfo(struct sysinfo *info); */ \
-[116] = { "sysinfo", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[117] = { "ipc", { UNKNOWN }, UNKNOWN }, \
+[116] = { "sysinfo", { PTR }, INT }, \
+/*        int ipc(unsigned int call, int first, int second, int third, void *ptr, long fifth); */ \
+[117] = { "ipc", { INT, INT, INT, INT, PTR, LONG }, INT }, \
 /*        int fsync(int fd); */ \
-[118] = { "fsync", { UNKNOWN }, UNKNOWN }, \
+[118] = { "fsync", { INT }, INT }, \
 /*        int sigreturn(...); */ \
-[119] = { "sigreturn", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[120] = { "clone", { UNKNOWN }, UNKNOWN }, \
+[119] = { "sigreturn", { UNKNOWN }, INT }, \
+/*        int clone(int (*fn)(void *), void *stack, int flags, void *arg, ...); */ \
+[120] = { "clone", { PTR, PTR, INT, PTR, UNKNOWN }, INT }, \
 /*        int setdomainname(const char *name, size_t len); */ \
-[121] = { "setdomainname", { UNKNOWN }, UNKNOWN }, \
+[121] = { "setdomainname", { STR, LONG }, INT }, \
 /*        int uname(struct utsname *buf); */ \
-[122] = { "uname", { UNKNOWN }, UNKNOWN }, \
+[122] = { "uname", { PTR }, INT }, \
 /*        int modify_ldt(int func, void *ptr, unsigned long bytecount); */ \
-[123] = { "modify_ldt", { UNKNOWN }, UNKNOWN }, \
+[123] = { "modify_ldt", { INT, PTR, LONG }, INT }, \
 /*        int adjtimex(struct timex *buf); */ \
-[124] = { "adjtimex", { UNKNOWN }, UNKNOWN }, \
-/*        int mprotect(void *addr, size_t len, int prot);
-       int pkey_mprotect(void *addr, size_t len, int prot, int pkey); */ \
-[125] = { "mprotect", { UNKNOWN }, UNKNOWN }, \
+[124] = { "adjtimex", { PTR }, INT }, \
+/*        int mprotect(void *addr, size_t len, int prot); */ \
+[125] = { "mprotect", { PTR, LONG, INT }, INT }, \
 /*        int sigprocmask(int how, const sigset_t *set, sigset_t *oldset); */ \
-[126] = { "sigprocmask", { UNKNOWN }, UNKNOWN }, \
+[126] = { "sigprocmask", { INT, PTR, PTR }, INT }, \
 /*        caddr_t create_module(const char *name, size_t size); */ \
 [127] = { "create_module", { UNKNOWN }, UNKNOWN }, \
 /*        Note: glibc provides no header file declaration of init_module() and no wrapper function for finit_module(); see NOTES. */ \
