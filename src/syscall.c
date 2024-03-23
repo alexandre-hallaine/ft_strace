@@ -28,6 +28,17 @@ int wait_for_syscall() {
     }
 }
 
+// Convert architecture dependent address to valid pointers
+void *to_ptr(long addr, int size) {
+    long convertore = 1;
+    convertore <<= size * 8;
+    convertore -= 1;
+
+    if (convertore != 0)
+        addr &= convertore;
+    return (void *) addr;
+}
+
 t_stop get_stop() {
     union {
         struct user_regs_struct_64 regs_64;
@@ -41,23 +52,23 @@ t_stop get_stop() {
     if (io.iov_len == sizeof(struct user_regs_struct_64)) {
         stop.arch = ARCH_64;
         stop.syscall = syscall_64 + regs.regs_64.orig_rax;
-        stop.args[0] = *(void **)&regs.regs_64.rdi;
-        stop.args[1] = *(void **)&regs.regs_64.rsi;
-        stop.args[2] = *(void **)&regs.regs_64.rdx;
-        stop.args[3] = *(void **)&regs.regs_64.r10;
-        stop.args[4] = *(void **)&regs.regs_64.r8;
-        stop.args[5] = *(void **)&regs.regs_64.r9;
-        stop.ret = *(void **)&regs.regs_64.rax;
+        stop.args[0] = to_ptr(regs.regs_64.rdi, 8);
+        stop.args[1] = to_ptr(regs.regs_64.rsi, 8);
+        stop.args[2] = to_ptr(regs.regs_64.rdx, 8);
+        stop.args[3] = to_ptr(regs.regs_64.r10, 8);
+        stop.args[4] = to_ptr(regs.regs_64.r8, 8);
+        stop.args[5] = to_ptr(regs.regs_64.r9, 8);
+        stop.ret = to_ptr(regs.regs_64.rax, 8);
     } else {
         stop.arch = ARCH_32;
         stop.syscall = syscall_32 + regs.regs_32.orig_eax;
-        stop.args[0] = *(void **)&regs.regs_32.ebx;
-        stop.args[1] = *(void **)&regs.regs_32.ecx;
-        stop.args[2] = *(void **)&regs.regs_32.edx;
-        stop.args[3] = *(void **)&regs.regs_32.esi;
-        stop.args[4] = *(void **)&regs.regs_32.edi;
-        stop.args[5] = *(void **)&regs.regs_32.ebp;
-        stop.ret = *(void **)&regs.regs_32.eax;
+        stop.args[0] = to_ptr(regs.regs_32.ebx, 4);
+        stop.args[1] = to_ptr(regs.regs_32.ecx, 4);
+        stop.args[2] = to_ptr(regs.regs_32.edx, 4);
+        stop.args[3] = to_ptr(regs.regs_32.esi, 4);
+        stop.args[4] = to_ptr(regs.regs_32.edi, 4);
+        stop.args[5] = to_ptr(regs.regs_32.ebp, 4);
+        stop.ret = to_ptr(regs.regs_32.eax, 4);
     }
     return stop;
 }
