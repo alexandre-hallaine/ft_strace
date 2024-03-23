@@ -22,7 +22,7 @@ extract_syscall_prototype() {
     if [[ $? -eq 0 ]]; then
         echo "$man_page" | \
         sed -n '/^SYNOPSIS/,/^DESCRIPTION/p' | \
-        grep -oE '\b[a-z_]+\([^\)]*\)\s*;' | \
+        grep -E '\b[a-z_]+\([^\)]*\)\s*;' | \
         grep -F "$syscall_name"
     fi
 }
@@ -53,9 +53,6 @@ generate_syscall_table() {
     done < <(grep -oE '__NR_[a-z0-9_]+\s+[0-9]+' "$syscall_header")
 
     echo "}" >> "$output_file"
-
-    echo "" >> "$output_file"
-    echo "#define SYSCALL_TABLE_${bit_version}_MAX ${syscall_number}" >> "$output_file"
 
     echo "Syscall table generated: $output_file"
 }
