@@ -39,11 +39,12 @@ typedef struct s_syscall {
     t_type ret;
 } t_syscall;
 
+// address are stored as long
 typedef struct s_stop {
     t_arch arch;
     t_syscall *syscall;
-    void *args[6];
-    void *ret;
+    long args[6];
+    long ret;
 } t_stop;
 
 struct user_regs_struct_64

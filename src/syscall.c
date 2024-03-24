@@ -28,18 +28,6 @@ int wait_for_syscall() {
     }
 }
 
-// Convert architecture dependent address to valid pointers
-void *to_ptr(long addr, int size) {
-    if (size >= (int)sizeof(long))
-        return (void *) addr;
-
-    long convertore = 1;
-    convertore <<= size * 8;
-    convertore -= 1;
-    
-    return (void *) (addr & convertore);
-}
-
 t_stop get_stop() {
     union {
         struct user_regs_struct_64 regs_64;
@@ -53,23 +41,23 @@ t_stop get_stop() {
     if (io.iov_len == sizeof(struct user_regs_struct_64)) {
         stop.arch = ARCH_64;
         stop.syscall = syscall_64 + regs.regs_64.orig_rax;
-        stop.args[0] = to_ptr(regs.regs_64.rdi, 8);
-        stop.args[1] = to_ptr(regs.regs_64.rsi, 8);
-        stop.args[2] = to_ptr(regs.regs_64.rdx, 8);
-        stop.args[3] = to_ptr(regs.regs_64.r10, 8);
-        stop.args[4] = to_ptr(regs.regs_64.r8, 8);
-        stop.args[5] = to_ptr(regs.regs_64.r9, 8);
-        stop.ret = to_ptr(regs.regs_64.rax, 8);
+        stop.args[0] = regs.regs_64.rdi;
+        stop.args[1] = regs.regs_64.rsi;
+        stop.args[2] = regs.regs_64.rdx;
+        stop.args[3] = regs.regs_64.r10;
+        stop.args[4] = regs.regs_64.r8;
+        stop.args[5] = regs.regs_64.r9;
+        stop.ret = regs.regs_64.rax;
     } else {
         stop.arch = ARCH_32;
         stop.syscall = syscall_32 + regs.regs_32.orig_eax;
-        stop.args[0] = to_ptr(regs.regs_32.ebx, 4);
-        stop.args[1] = to_ptr(regs.regs_32.ecx, 4);
-        stop.args[2] = to_ptr(regs.regs_32.edx, 4);
-        stop.args[3] = to_ptr(regs.regs_32.esi, 4);
-        stop.args[4] = to_ptr(regs.regs_32.edi, 4);
-        stop.args[5] = to_ptr(regs.regs_32.ebp, 4);
-        stop.ret = to_ptr(regs.regs_32.eax, 4);
+        stop.args[0] = regs.regs_32.ebx;
+        stop.args[1] = regs.regs_32.ecx;
+        stop.args[2] = regs.regs_32.edx;
+        stop.args[3] = regs.regs_32.esi;
+        stop.args[4] = regs.regs_32.edi;
+        stop.args[5] = regs.regs_32.ebp;
+        stop.ret = regs.regs_32.eax;
     }
     return stop;
 }
@@ -83,13 +71,13 @@ void print_syscall(t_stop *before, t_stop *after) {
     for (int i = 0; before->syscall->args[i]; i++) {
         if (i > 0)
             printf(", ");
-        print_value(before->syscall->args[i], before->args[i]);
+        print_value(before->syscall->args[i], before->args[i], before->arch);
     }
 
     printf(") = ");
 
     if (after != NULL)
-        print_value(after->syscall->ret, after->ret);
+        print_value(after->syscall->ret, after->ret, after->arch);
     else
         printf("?");
 
