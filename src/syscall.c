@@ -37,29 +37,34 @@ t_stop get_stop() {
     struct iovec io = { &regs, sizeof(regs) };
     ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io);
 
-    t_stop stop = {0};
-    if (io.iov_len == sizeof(struct user_regs_struct_64)) {
-        stop.arch = ARCH_64;
-        stop.syscall = syscall_64 + regs.regs_64.orig_rax;
-        stop.args[0] = regs.regs_64.rdi;
-        stop.args[1] = regs.regs_64.rsi;
-        stop.args[2] = regs.regs_64.rdx;
-        stop.args[3] = regs.regs_64.r10;
-        stop.args[4] = regs.regs_64.r8;
-        stop.args[5] = regs.regs_64.r9;
-        stop.ret = regs.regs_64.rax;
-    } else {
-        stop.arch = ARCH_32;
-        stop.syscall = syscall_32 + regs.regs_32.orig_eax;
-        stop.args[0] = regs.regs_32.ebx;
-        stop.args[1] = regs.regs_32.ecx;
-        stop.args[2] = regs.regs_32.edx;
-        stop.args[3] = regs.regs_32.esi;
-        stop.args[4] = regs.regs_32.edi;
-        stop.args[5] = regs.regs_32.ebp;
-        stop.ret = regs.regs_32.eax;
-    }
-    return stop;
+    if (io.iov_len == sizeof(struct user_regs_struct_64))
+        return (t_stop) {
+            .arch = ARCH_64,
+            .syscall = syscall_64 + regs.regs_64.orig_rax,
+            .args = {
+                regs.regs_64.rdi,
+                regs.regs_64.rsi,
+                regs.regs_64.rdx,
+                regs.regs_64.r10,
+                regs.regs_64.r8,
+                regs.regs_64.r9,
+            },
+            .ret = regs.regs_64.rax,
+        };
+    else
+        return (t_stop) {
+            .arch = ARCH_32,
+            .syscall = syscall_32 + regs.regs_32.orig_eax,
+            .args = {
+                regs.regs_32.ebx,
+                regs.regs_32.ecx,
+                regs.regs_32.edx,
+                regs.regs_32.esi,
+                regs.regs_32.edi,
+                regs.regs_32.ebp,
+            },
+            .ret = regs.regs_32.eax,
+        };
 }
 
 void print_syscall(t_stop *before, t_stop *after) {
