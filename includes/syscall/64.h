@@ -3,134 +3,125 @@
 
 #define SYSCALL_TABLE_64 { \
 /*        ssize_t read(int fd, void *buf, size_t count); */ \
-[0] = { "read", { UNKNOWN }, UNKNOWN }, \
+[0] = { "read", { INT, PTR, LONG }, LONG }, \
 /*        ssize_t write(int fd, const void *buf, size_t count); */ \
-[1] = { "write", { UNKNOWN }, UNKNOWN }, \
-/*        int open(const char *pathname, int flags);
-       int open(const char *pathname, int flags, mode_t mode);
-       int openat(int dirfd, const char *pathname, int flags);
-       int openat(int dirfd, const char *pathname, int flags, mode_t mode); */ \
-[2] = { "open", { UNKNOWN }, UNKNOWN }, \
+[1] = { "write", { INT, PTR, LONG }, LONG }, \
+/*        int open(const char *pathname, int flags, mode_t mode); */ \
+[2] = { "open", { STR, INT, MODE }, INT }, \
 /*        int close(int fd); */ \
-[3] = { "close", { UNKNOWN }, UNKNOWN }, \
-/*        int stat(const char *pathname, struct stat *statbuf);
-       int fstat(int fd, struct stat *statbuf);
-       int lstat(const char *pathname, struct stat *statbuf); */ \
-[4] = { "stat", { UNKNOWN }, UNKNOWN }, \
+[3] = { "close", { INT }, INT }, \
+/*        int stat(const char *pathname, struct stat *statbuf); */ \
+[4] = { "stat", { STR, PTR }, INT }, \
 /*        int fstat(int fd, struct stat *statbuf); */ \
-[5] = { "fstat", { UNKNOWN }, UNKNOWN }, \
+[5] = { "fstat", { INT, PTR }, INT }, \
 /*        int lstat(const char *pathname, struct stat *statbuf); */ \
-[6] = { "lstat", { UNKNOWN }, UNKNOWN }, \
+[6] = { "lstat", { STR, PTR }, INT }, \
 /*        int poll(struct pollfd *fds, nfds_t nfds, int timeout); */ \
-[7] = { "poll", { UNKNOWN }, UNKNOWN }, \
+[7] = { "poll", { PTR, UNKNOWN_STRUCT, INT }, INT }, \
 /*        off_t lseek(int fd, off_t offset, int whence); */ \
-[8] = { "lseek", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[9] = { "mmap", { UNKNOWN }, UNKNOWN }, \
-/*        int mprotect(void *addr, size_t len, int prot);
-       int pkey_mprotect(void *addr, size_t len, int prot, int pkey); */ \
-[10] = { "mprotect", { UNKNOWN }, UNKNOWN }, \
+[8] = { "lseek", { INT, OFF, INT }, OFF }, \
+/*        void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset); */ \
+[9] = { "mmap", { PTR, LONG, INT, INT, INT, OFF }, PTR }, \
+/*        int mprotect(void *addr, size_t len, int prot); */ \
+[10] = { "mprotect", { PTR, LONG, INT }, INT }, \
 /*        int munmap(void *addr, size_t length); */ \
-[11] = { "munmap", { UNKNOWN }, UNKNOWN }, \
-/*        int brk(void *addr);
-       void *sbrk(intptr_t increment); */ \
-[12] = { "brk", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[13] = { "rt_sigaction", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[14] = { "rt_sigprocmask", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[15] = { "rt_sigreturn", { UNKNOWN }, UNKNOWN }, \
+[11] = { "munmap", { PTR, LONG }, INT }, \
+/*        int brk(void *addr); */ \
+[12] = { "brk", { PTR }, INT }, \
+/*        int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact); */ \
+[13] = { "rt_sigaction", { INT, PTR, PTR }, INT }, \
+/*        int rt_sigprocmask(int how, const kernel_sigset_t *set, kernel_sigset_t *oldset, size_t sigsetsize); */ \
+[14] = { "rt_sigprocmask", { INT, PTR, PTR, LONG }, INT }, \
+/*        int sigreturn(...); */ \
+[15] = { "rt_sigreturn", { UNKNOWN }, INT }, \
 /*        int ioctl(int fd, unsigned long request, ...); */ \
-[16] = { "ioctl", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[17] = { "pread64", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[18] = { "pwrite64", { UNKNOWN }, UNKNOWN }, \
+[16] = { "ioctl", { INT, LONG, UNKNOWN }, INT }, \
+/*        ssize_t pread(int fd, void *buf, size_t count, off_t offset); */ \
+[17] = { "pread64", { INT, PTR, LONG, OFF }, LONG }, \
+/*        ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset); */ \
+[18] = { "pwrite64", { INT, PTR, LONG, OFF }, LONG }, \
 /*        ssize_t readv(int fd, const struct iovec *iov, int iovcnt); */ \
-[19] = { "readv", { UNKNOWN }, UNKNOWN }, \
+[19] = { "readv", { INT, PTR, INT }, LONG }, \
 /*        ssize_t writev(int fd, const struct iovec *iov, int iovcnt); */ \
-[20] = { "writev", { UNKNOWN }, UNKNOWN }, \
-/*        int access(const char *pathname, int mode);
-       int faccessat(int dirfd, const char *pathname, int mode, int flags); */ \
-[21] = { "access", { UNKNOWN }, UNKNOWN }, \
-/*        struct fd_pair pipe();
-       int pipe(int pipefd[2]); */ \
-[22] = { "pipe", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[23] = { "select", { UNKNOWN }, UNKNOWN }, \
+[20] = { "writev", { INT, PTR, INT }, LONG }, \
+/*        int access(const char *pathname, int mode); */ \
+[21] = { "access", { STR, INT }, INT }, \
+/*        int pipe(int pipefd[2]); */ \
+[22] = { "pipe", { UNKNOWN_STRUCT }, INT }, \
+/*        int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout); */ \
+[23] = { "select", { INT, PTR, PTR, PTR, PTR }, INT }, \
 /*        int sched_yield(void); */ \
-[24] = { "sched_yield", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[25] = { "mremap", { UNKNOWN }, UNKNOWN }, \
+[24] = { "sched_yield", { }, INT }, \
+/*        void *mremap(void *old_address, size_t old_size, size_t new_size, int flags, ...); */ \
+[25] = { "mremap", { PTR, LONG, LONG, INT, UNKNOWN }, PTR }, \
 /*        int msync(void *addr, size_t length, int flags); */ \
-[26] = { "msync", { UNKNOWN }, UNKNOWN }, \
+[26] = { "msync", { PTR, LONG, INT }, INT }, \
 /*        int mincore(void *addr, size_t length, unsigned char *vec); */ \
-[27] = { "mincore", { UNKNOWN }, UNKNOWN }, \
+[27] = { "mincore", { PTR, LONG, STR }, INT }, \
 /*        int madvise(void *addr, size_t length, int advice); */ \
-[28] = { "madvise", { UNKNOWN }, UNKNOWN }, \
+[28] = { "madvise", { PTR, LONG, INT }, INT }, \
 /*        int shmget(key_t key, size_t size, int shmflg); */ \
-[29] = { "shmget", { UNKNOWN }, UNKNOWN }, \
+[29] = { "shmget", { UNKNOWN_STRUCT, LONG, INT }, INT }, \
 /*        void *shmat(int shmid, const void *shmaddr, int shmflg); */ \
-[30] = { "shmat", { UNKNOWN }, UNKNOWN }, \
+[30] = { "shmat", { INT, PTR, INT }, PTR }, \
 /*        int shmctl(int shmid, int cmd, struct shmid_ds *buf); */ \
-[31] = { "shmctl", { UNKNOWN }, UNKNOWN }, \
+[31] = { "shmctl", { INT, INT, PTR }, INT }, \
 /*        int dup(int oldfd); */ \
-[32] = { "dup", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[33] = { "dup2", { UNKNOWN }, UNKNOWN }, \
+[32] = { "dup", { INT }, INT }, \
+/*        int dup2(int oldfd, int newfd); */ \
+[33] = { "dup2", { INT, INT }, INT }, \
 /*        int pause(void); */ \
-[34] = { "pause", { UNKNOWN }, UNKNOWN }, \
+[34] = { "pause", { }, INT }, \
 /*        int nanosleep(const struct timespec *req, struct timespec *rem); */ \
-[35] = { "nanosleep", { UNKNOWN }, UNKNOWN }, \
+[35] = { "nanosleep", { PTR, PTR }, INT }, \
 /*        int getitimer(int which, struct itimerval *curr_value); */ \
-[36] = { "getitimer", { UNKNOWN }, UNKNOWN }, \
+[36] = { "getitimer", { INT, PTR }, INT }, \
 /*        unsigned int alarm(unsigned int seconds); */ \
-[37] = { "alarm", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[38] = { "setitimer", { UNKNOWN }, UNKNOWN }, \
+[37] = { "alarm", { INT }, INT }, \
+/*        int setitimer(int which, const struct itimerval *new_value, struct itimerval *old_value); */ \
+[38] = { "setitimer", { INT, PTR, PTR }, INT }, \
 /*        pid_t getpid(void); */ \
-[39] = { "getpid", { UNKNOWN }, UNKNOWN }, \
+[39] = { "getpid", { }, ID }, \
 /*        ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count); */ \
-[40] = { "sendfile", { UNKNOWN }, UNKNOWN }, \
+[40] = { "sendfile", { INT, INT, PTR, LONG }, LONG }, \
 /*        int socket(int domain, int type, int protocol); */ \
-[41] = { "socket", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[42] = { "connect", { UNKNOWN }, UNKNOWN }, \
+[41] = { "socket", { INT, INT, INT }, INT }, \
+/*        int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen); */ \
+[42] = { "connect", { INT, PTR, UNKNOWN_STRUCT }, INT }, \
 /*        int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen); */ \
-[43] = { "accept", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[44] = { "sendto", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[45] = { "recvfrom", { UNKNOWN }, UNKNOWN }, \
+[43] = { "accept", { INT, PTR, PTR }, INT }, \
+/*        ssize_t sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *dest_addr, socklen_t addrlen); */ \
+[44] = { "sendto", { INT, PTR, LONG, INT, PTR, UNKNOWN_STRUCT }, LONG }, \
+/*        ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *src_addr, socklen_t *addrlen); */ \
+[45] = { "recvfrom", { INT, PTR, LONG, INT, PTR, PTR }, LONG }, \
 /*        ssize_t sendmsg(int sockfd, const struct msghdr *msg, int flags); */ \
-[46] = { "sendmsg", { UNKNOWN }, UNKNOWN }, \
+[46] = { "sendmsg", { INT, PTR, INT }, LONG }, \
 /*        ssize_t recvmsg(int sockfd, struct msghdr *msg, int flags); */ \
-[47] = { "recvmsg", { UNKNOWN }, UNKNOWN }, \
+[47] = { "recvmsg", { INT, PTR, INT }, LONG }, \
 /*        int shutdown(int sockfd, int how); */ \
-[48] = { "shutdown", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[49] = { "bind", { UNKNOWN }, UNKNOWN }, \
+[48] = { "shutdown", { INT, INT }, INT }, \
+/*        int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen); */ \
+[49] = { "bind", { INT, PTR, UNKNOWN_STRUCT }, INT }, \
 /*        int listen(int sockfd, int backlog); */ \
-[50] = { "listen", { UNKNOWN }, UNKNOWN }, \
+[50] = { "listen", { INT, INT }, INT }, \
 /*        int getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen); */ \
-[51] = { "getsockname", { UNKNOWN }, UNKNOWN }, \
+[51] = { "getsockname", { INT, PTR, PTR }, INT }, \
 /*        int getpeername(int sockfd, struct sockaddr *addr, socklen_t *addrlen); */ \
-[52] = { "getpeername", { UNKNOWN }, UNKNOWN }, \
+[52] = { "getpeername", { INT, PTR, PTR }, INT }, \
 /*        int socketpair(int domain, int type, int protocol, int sv[2]); */ \
-[53] = { "socketpair", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[54] = { "setsockopt", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[55] = { "getsockopt", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[56] = { "clone", { UNKNOWN }, UNKNOWN }, \
+[53] = { "socketpair", { INT, INT, INT, ARRAY | INT }, INT }, \
+/*        int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen); */ \
+[54] = { "setsockopt", { INT, INT, INT, PTR, UNKNOWN_STRUCT }, INT }, \
+/*        int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen); */ \
+[55] = { "getsockopt", { INT, INT, INT, PTR, PTR }, INT }, \
+/*        int clone(int (*fn)(void *), void *stack, int flags, void *arg, ...); */ \
+[56] = { "clone", { UNKNOWN_STRUCT, PTR, INT, PTR, UNKNOWN }, INT }, \
 /*        pid_t fork(void); */ \
-[57] = { "fork", { UNKNOWN }, UNKNOWN }, \
+[57] = { "fork", { }, ID }, \
 /*        pid_t vfork(void); */ \
-[58] = { "vfork", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[59] = { "execve", { UNKNOWN }, UNKNOWN }, \
+[58] = { "vfork", { }, ID }, \
+/*        int execve(const char *pathname, char *const argv[], char *const envp[]); */ \
+[59] = { "execve", { STR, ARRAY | STR, ARRAY | STR }, INT }, \
 /*        void _exit(int status); */ \
 [60] = { "exit", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
