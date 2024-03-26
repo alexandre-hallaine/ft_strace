@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include <sys/ptrace.h>
 #include <sys/wait.h>
@@ -29,21 +30,11 @@ int main(int argc, char *argv[]) {
     waitpid(child_pid, NULL, 0); // wait the kill
     ptrace(PTRACE_SETOPTIONS, child_pid, NULL, PTRACE_O_TRACESYSGOOD);
 
-    t_stop stop[2];
-    for (int index = 0;; index = 0) {
-        if (wait_for_syscall() == 0)
-            stop[index++] = get_stop(); // syscall entry
-        if (wait_for_syscall() == 0)
-            stop[index++] = get_stop(); // syscall exit
-
-        if (index == 1)
-            print_syscall(stop, NULL);
-        if (index == 2)
-            print_syscall(stop, stop + 1);
-        else break;
+    int status = -1;
+    while (!WIFEXITED(status)) {
+        t_stop *first_stop = wait_syscall(&status); // enter the syscall
+        t_stop *second_stop = wait_syscall(&status); // exit the syscall
+        print_syscall(first_stop, second_stop);
     }
-
-    siginfo_t info;
-    ptrace(PTRACE_GETSIGINFO, child_pid, NULL, &info);
-    printf("+++ exited with %d +++\n", info.si_status);
+    printf("+++ exited with %d +++\n", WEXITSTATUS(status));
 }

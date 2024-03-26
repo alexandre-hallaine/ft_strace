@@ -3,8 +3,7 @@
 #include "types.h"
 
 // syscall.c
-int wait_for_syscall();
-t_stop get_stop();
+t_stop *wait_syscall(int *status);
 void print_syscall(t_stop *before, t_stop *after);
 
 // value.c
