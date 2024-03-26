@@ -123,268 +123,247 @@
 /*        int execve(const char *pathname, char *const argv[], char *const envp[]); */ \
 [59] = { "execve", { STR, ARRAY | STR, ARRAY | STR }, INT }, \
 /*        void _exit(int status); */ \
-[60] = { "exit", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[61] = { "wait4", { UNKNOWN }, UNKNOWN }, \
+[60] = { "exit", { INT } }, \
+/*        pid_t wait4(pid_t pid, int *wstatus, int options, struct rusage *rusage); */ \
+[61] = { "wait4", { ID, PTR, INT, PTR }, ID }, \
 /*        int kill(pid_t pid, int sig); */ \
-[62] = { "kill", { UNKNOWN }, UNKNOWN }, \
+[62] = { "kill", { ID, INT }, INT }, \
 /*        int uname(struct utsname *buf); */ \
-[63] = { "uname", { UNKNOWN }, UNKNOWN }, \
+[63] = { "uname", { PTR }, INT }, \
 /*        int semget(key_t key, int nsems, int semflg); */ \
-[64] = { "semget", { UNKNOWN }, UNKNOWN }, \
+[64] = { "semget", { UNKNOWN_STRUCT, INT, INT }, INT }, \
 /*        int semop(int semid, struct sembuf *sops, size_t nsops); */ \
-[65] = { "semop", { UNKNOWN }, UNKNOWN }, \
+[65] = { "semop", { INT, PTR, LONG }, INT }, \
 /*        int semctl(int semid, int semnum, int cmd, ...); */ \
-[66] = { "semctl", { UNKNOWN }, UNKNOWN }, \
+[66] = { "semctl", { INT, INT, INT, UNKNOWN }, INT }, \
 /*        int shmdt(const void *shmaddr); */ \
-[67] = { "shmdt", { UNKNOWN }, UNKNOWN }, \
+[67] = { "shmdt", { PTR }, INT }, \
 /*        int msgget(key_t key, int msgflg); */ \
-[68] = { "msgget", { UNKNOWN }, UNKNOWN }, \
+[68] = { "msgget", { UNKNOWN_STRUCT, INT }, INT }, \
 /*        int msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg); */ \
-[69] = { "msgsnd", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[70] = { "msgrcv", { UNKNOWN }, UNKNOWN }, \
+[69] = { "msgsnd", { INT, PTR, LONG, INT }, INT }, \
+/*        ssize_t msgrcv(int msqid, void *msgp, size_t msgsz, long msgtyp, int msgflg); */ \
+[70] = { "msgrcv", { INT, PTR, LONG, LONG, INT }, LONG }, \
 /*        int msgctl(int msqid, int cmd, struct msqid_ds *buf); */ \
-[71] = { "msgctl", { UNKNOWN }, UNKNOWN }, \
-/*        int fcntl(int fd, int cmd, ...  ); */ \
-[72] = { "fcntl", { UNKNOWN }, UNKNOWN }, \
+[71] = { "msgctl", { INT, INT, PTR }, INT }, \
+/*        int fcntl(int fd, int cmd, ...); */ \
+[72] = { "fcntl", { INT, INT, UNKNOWN }, INT }, \
 /*        int flock(int fd, int operation); */ \
-[73] = { "flock", { UNKNOWN }, UNKNOWN }, \
+[73] = { "flock", { INT, INT }, INT }, \
 /*        int fsync(int fd); */ \
-[74] = { "fsync", { UNKNOWN }, UNKNOWN }, \
+[74] = { "fsync", { INT }, INT }, \
 /*        int fdatasync(int fd); */ \
-[75] = { "fdatasync", { UNKNOWN }, UNKNOWN }, \
-/*        int truncate(const char *path, off_t length);
-       int ftruncate(int fd, off_t length); */ \
-[76] = { "truncate", { UNKNOWN }, UNKNOWN }, \
+[75] = { "fdatasync", { INT }, INT }, \
+/*        int truncate(const char *path, off_t length); */ \
+[76] = { "truncate", { STR, OFF }, INT }, \
 /*        int ftruncate(int fd, off_t length); */ \
-[77] = { "ftruncate", { UNKNOWN }, UNKNOWN }, \
-/*        Note: There is no glibc wrapper for getdents(); see NOTES. */ \
-[78] = { "getdents", { UNKNOWN }, UNKNOWN }, \
+[77] = { "ftruncate", { INT, OFF }, INT }, \
+/*        ssize_t getdents64(int fd, void *dirp, size_t count); */ \
+[78] = { "getdents", { INT, PTR, LONG }, LONG }, \
 /*        char *getcwd(char *buf, size_t size); */ \
-[79] = { "getcwd", { UNKNOWN }, UNKNOWN }, \
-/*        int chdir(const char *path);
-       int fchdir(int fd); */ \
-[80] = { "chdir", { UNKNOWN }, UNKNOWN }, \
+[79] = { "getcwd", { STR, LONG }, STR }, \
+/*        int chdir(const char *path); */ \
+[80] = { "chdir", { STR }, INT }, \
 /*        int fchdir(int fd); */ \
-[81] = { "fchdir", { UNKNOWN }, UNKNOWN }, \
+[81] = { "fchdir", { INT }, INT }, \
 /*        int rename(const char *oldpath, const char *newpath); */ \
-[82] = { "rename", { UNKNOWN }, UNKNOWN }, \
-/*        int mkdir(const char *pathname, mode_t mode);
-       int mkdirat(int dirfd, const char *pathname, mode_t mode); */ \
-[83] = { "mkdir", { UNKNOWN }, UNKNOWN }, \
+[82] = { "rename", { STR, STR }, INT }, \
+/*        int mkdir(const char *pathname, mode_t mode); */ \
+[83] = { "mkdir", { STR, MODE }, INT }, \
 /*        int rmdir(const char *pathname); */ \
-[84] = { "rmdir", { UNKNOWN }, UNKNOWN }, \
+[84] = { "rmdir", { STR }, INT }, \
 /*        int creat(const char *pathname, mode_t mode); */ \
-[85] = { "creat", { UNKNOWN }, UNKNOWN }, \
+[85] = { "creat", { STR, MODE }, INT }, \
 /*        int link(const char *oldpath, const char *newpath); */ \
-[86] = { "link", { UNKNOWN }, UNKNOWN }, \
-/*        int unlink(const char *pathname);
-       int unlinkat(int dirfd, const char *pathname, int flags); */ \
-[87] = { "unlink", { UNKNOWN }, UNKNOWN }, \
-/*        int symlink(const char *target, const char *linkpath);
-       int symlinkat(const char *target, int newdirfd, const char *linkpath); */ \
-[88] = { "symlink", { UNKNOWN }, UNKNOWN }, \
+[86] = { "link", { STR, STR }, INT }, \
+/*        int unlink(const char *pathname); */ \
+[87] = { "unlink", { STR }, INT }, \
+/*        int symlink(const char *target, const char *linkpath); */ \
+[88] = { "symlink", { STR, STR }, INT }, \
 /*        ssize_t readlink(const char *pathname, char *buf, size_t bufsiz); */ \
-[89] = { "readlink", { UNKNOWN }, UNKNOWN }, \
-/*        int chmod(const char *pathname, mode_t mode);
-       int fchmod(int fd, mode_t mode);
-       int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags); */ \
-[90] = { "chmod", { UNKNOWN }, UNKNOWN }, \
-/*        int fchmod(int fd, mode_t mode);
-       int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags); */ \
-[91] = { "fchmod", { UNKNOWN }, UNKNOWN }, \
-/*        int chown(const char *pathname, uid_t owner, gid_t group);
-       int fchown(int fd, uid_t owner, gid_t group);
-       int lchown(const char *pathname, uid_t owner, gid_t group); */ \
-[92] = { "chown", { UNKNOWN }, UNKNOWN }, \
+[89] = { "readlink", { STR, STR, LONG }, LONG }, \
+/*        int chmod(const char *pathname, mode_t mode); */ \
+[90] = { "chmod", { STR, MODE }, INT }, \
+/*        int fchmod(int fd, mode_t mode); */ \
+[91] = { "fchmod", { INT, MODE }, INT }, \
+/*        int chown(const char *pathname, uid_t owner, gid_t group); */ \
+[92] = { "chown", { STR, ID, ID }, INT }, \
 /*        int fchown(int fd, uid_t owner, gid_t group); */ \
-[93] = { "fchown", { UNKNOWN }, UNKNOWN }, \
+[93] = { "fchown", { INT, ID, ID }, INT }, \
 /*        int lchown(const char *pathname, uid_t owner, gid_t group); */ \
-[94] = { "lchown", { UNKNOWN }, UNKNOWN }, \
+[94] = { "lchown", { STR, ID, ID }, INT }, \
 /*        mode_t umask(mode_t mask); */ \
-[95] = { "umask", { UNKNOWN }, UNKNOWN }, \
+[95] = { "umask", { MODE }, MODE }, \
 /*        int gettimeofday(struct timeval *tv, struct timezone *tz); */ \
-[96] = { "gettimeofday", { UNKNOWN }, UNKNOWN }, \
+[96] = { "gettimeofday", { PTR, PTR }, INT }, \
 /*        int getrlimit(int resource, struct rlimit *rlim); */ \
-[97] = { "getrlimit", { UNKNOWN }, UNKNOWN }, \
+[97] = { "getrlimit", { INT, PTR }, INT }, \
 /*        int getrusage(int who, struct rusage *usage); */ \
-[98] = { "getrusage", { UNKNOWN }, UNKNOWN }, \
+[98] = { "getrusage", { INT, PTR }, INT }, \
 /*        int sysinfo(struct sysinfo *info); */ \
-[99] = { "sysinfo", { UNKNOWN }, UNKNOWN }, \
+[99] = { "sysinfo", { PTR }, INT }, \
 /*        clock_t times(struct tms *buf); */ \
-[100] = { "times", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[101] = { "ptrace", { UNKNOWN }, UNKNOWN }, \
+[100] = { "times", { PTR }, UNKNOWN_STRUCT }, \
+/*        long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data); */ \
+[101] = { "ptrace", { UNKNOWN_STRUCT, ID, PTR, PTR }, LONG }, \
 /*        uid_t getuid(void); */ \
-[102] = { "getuid", { UNKNOWN }, UNKNOWN }, \
+[102] = { "getuid", { }, ID }, \
 /*        int syslog(int type, char *bufp, int len); */ \
-[103] = { "syslog", { UNKNOWN }, UNKNOWN }, \
+[103] = { "syslog", { INT, STR, INT }, INT }, \
 /*        gid_t getgid(void); */ \
-[104] = { "getgid", { UNKNOWN }, UNKNOWN }, \
+[104] = { "getgid", { }, ID }, \
 /*        int setuid(uid_t uid); */ \
-[105] = { "setuid", { UNKNOWN }, UNKNOWN }, \
+[105] = { "setuid", { ID }, INT }, \
 /*        int setgid(gid_t gid); */ \
-[106] = { "setgid", { UNKNOWN }, UNKNOWN }, \
+[106] = { "setgid", { ID }, INT }, \
 /*        uid_t geteuid(void); */ \
-[107] = { "geteuid", { UNKNOWN }, UNKNOWN }, \
+[107] = { "geteuid", { }, ID }, \
 /*        gid_t getegid(void); */ \
-[108] = { "getegid", { UNKNOWN }, UNKNOWN }, \
+[108] = { "getegid", { }, ID }, \
 /*        int setpgid(pid_t pid, pid_t pgid); */ \
-[109] = { "setpgid", { UNKNOWN }, UNKNOWN }, \
+[109] = { "setpgid", { ID, ID }, INT }, \
 /*        pid_t getppid(void); */ \
-[110] = { "getppid", { UNKNOWN }, UNKNOWN }, \
-/*        pid_t getpgrp(void);                 
-       pid_t getpgrp(pid_t pid);             */ \
-[111] = { "getpgrp", { UNKNOWN }, UNKNOWN }, \
+[110] = { "getppid", { }, ID }, \
+/*        pid_t getpgrp(pid_t pid); */ \
+[111] = { "getpgrp", { ID }, ID }, \
 /*        pid_t setsid(void); */ \
-[112] = { "setsid", { UNKNOWN }, UNKNOWN }, \
+[112] = { "setsid", { }, ID }, \
 /*        int setreuid(uid_t ruid, uid_t euid); */ \
-[113] = { "setreuid", { UNKNOWN }, UNKNOWN }, \
+[113] = { "setreuid", { ID, ID }, INT }, \
 /*        int setregid(gid_t rgid, gid_t egid); */ \
-[114] = { "setregid", { UNKNOWN }, UNKNOWN }, \
+[114] = { "setregid", { ID, ID }, INT }, \
 /*        int getgroups(int size, gid_t list[]); */ \
-[115] = { "getgroups", { UNKNOWN }, UNKNOWN }, \
+[115] = { "getgroups", { INT, ARRAY | ID }, INT }, \
 /*        int setgroups(size_t size, const gid_t *list); */ \
-[116] = { "setgroups", { UNKNOWN }, UNKNOWN }, \
+[116] = { "setgroups", { LONG, PTR }, INT }, \
 /*        int setresuid(uid_t ruid, uid_t euid, uid_t suid); */ \
-[117] = { "setresuid", { UNKNOWN }, UNKNOWN }, \
+[117] = { "setresuid", { ID, ID, ID }, INT }, \
 /*        int getresuid(uid_t *ruid, uid_t *euid, uid_t *suid); */ \
-[118] = { "getresuid", { UNKNOWN }, UNKNOWN }, \
+[118] = { "getresuid", { PTR, PTR, PTR }, INT }, \
 /*        int setresgid(gid_t rgid, gid_t egid, gid_t sgid); */ \
-[119] = { "setresgid", { UNKNOWN }, UNKNOWN }, \
+[119] = { "setresgid", { ID, ID, ID }, INT }, \
 /*        int getresgid(gid_t *rgid, gid_t *egid, gid_t *sgid); */ \
-[120] = { "getresgid", { UNKNOWN }, UNKNOWN }, \
+[120] = { "getresgid", { PTR, PTR, PTR }, INT }, \
 /*        pid_t getpgid(pid_t pid); */ \
-[121] = { "getpgid", { UNKNOWN }, UNKNOWN }, \
+[121] = { "getpgid", { ID }, ID }, \
 /*        int setfsuid(uid_t fsuid); */ \
-[122] = { "setfsuid", { UNKNOWN }, UNKNOWN }, \
+[122] = { "setfsuid", { ID }, INT }, \
 /*        int setfsgid(uid_t fsgid); */ \
-[123] = { "setfsgid", { UNKNOWN }, UNKNOWN }, \
+[123] = { "setfsgid", { ID }, INT }, \
 /*        pid_t getsid(pid_t pid); */ \
-[124] = { "getsid", { UNKNOWN }, UNKNOWN }, \
+[124] = { "getsid", { ID }, ID }, \
 /*        int capget(cap_user_header_t hdrp, cap_user_data_t datap); */ \
-[125] = { "capget", { UNKNOWN }, UNKNOWN }, \
+[125] = { "capget", { UNKNOWN_STRUCT, UNKNOWN_STRUCT }, INT }, \
 /*        int capset(cap_user_header_t hdrp, const cap_user_data_t datap); */ \
-[126] = { "capset", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[127] = { "rt_sigpending", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[128] = { "rt_sigtimedwait", { UNKNOWN }, UNKNOWN }, \
+[126] = { "capset", { UNKNOWN_STRUCT, UNKNOWN_STRUCT }, INT }, \
+/*        int sigpending(sigset_t *set); */ \
+[127] = { "rt_sigpending", { PTR }, INT }, \
+/*        int sigtimedwait(const sigset_t *set, siginfo_t *info, const struct timespec *timeout); */ \
+[128] = { "rt_sigtimedwait", { PTR, PTR, PTR }, INT }, \
 /*        int rt_sigqueueinfo(pid_t tgid, int sig, siginfo_t *info); */ \
-[129] = { "rt_sigqueueinfo", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[130] = { "rt_sigsuspend", { UNKNOWN }, UNKNOWN }, \
+[129] = { "rt_sigqueueinfo", { ID, INT, PTR }, INT }, \
+/*        int sigsuspend(const sigset_t *mask); */ \
+[130] = { "rt_sigsuspend", { PTR }, INT }, \
 /*        int sigaltstack(const stack_t *ss, stack_t *old_ss); */ \
-[131] = { "sigaltstack", { UNKNOWN }, UNKNOWN }, \
-/*        int utime(const char *filename, const struct utimbuf *times);
-       int utimes(const char *filename, const struct timeval times[2]); */ \
-[132] = { "utime", { UNKNOWN }, UNKNOWN }, \
-/*        int mknod(const char *pathname, mode_t mode, dev_t dev);
-       int mknodat(int dirfd, const char *pathname, mode_t mode, dev_t dev); */ \
-[133] = { "mknod", { UNKNOWN }, UNKNOWN }, \
+[131] = { "sigaltstack", { PTR, PTR }, INT }, \
+/*        int utime(const char *filename, const struct utimbuf *times); */ \
+[132] = { "utime", { STR, PTR }, INT }, \
+/*        int mknod(const char *pathname, mode_t mode, dev_t dev); */ \
+[133] = { "mknod", { STR, MODE, DEV }, INT }, \
 /*        int uselib(const char *library); */ \
-[134] = { "uselib", { UNKNOWN }, UNKNOWN }, \
+[134] = { "uselib", { STR }, INT }, \
 /*        int personality(unsigned long persona); */ \
-[135] = { "personality", { UNKNOWN }, UNKNOWN }, \
+[135] = { "personality", { LONG }, INT }, \
 /*        int ustat(dev_t dev, struct ustat *ubuf); */ \
-[136] = { "ustat", { UNKNOWN }, UNKNOWN }, \
-/*        int statfs(const char *path, struct statfs *buf);
-       int fstatfs(int fd, struct statfs *buf); */ \
-[137] = { "statfs", { UNKNOWN }, UNKNOWN }, \
+[136] = { "ustat", { DEV, PTR }, INT }, \
+/*        int statfs(const char *path, struct statfs *buf); */ \
+[137] = { "statfs", { STR, PTR }, INT }, \
 /*        int fstatfs(int fd, struct statfs *buf); */ \
-[138] = { "fstatfs", { UNKNOWN }, UNKNOWN }, \
-/*        int sysfs(int option, const char *fsname);
-       int sysfs(int option, unsigned int fs_index, char *buf);
-       int sysfs(int option); */ \
-[139] = { "sysfs", { UNKNOWN }, UNKNOWN }, \
+[138] = { "fstatfs", { INT, PTR }, INT }, \
+/*        int sysfs(int option, unsigned int fs_index, char *buf); */ \
+[139] = { "sysfs", { INT, INT, STR }, INT }, \
 /*        int getpriority(int which, id_t who); */ \
-[140] = { "getpriority", { UNKNOWN }, UNKNOWN }, \
+[140] = { "getpriority", { INT, ID }, INT }, \
 /*        int setpriority(int which, id_t who, int prio); */ \
-[141] = { "setpriority", { UNKNOWN }, UNKNOWN }, \
+[141] = { "setpriority", { INT, ID, INT }, INT }, \
 /*        int sched_setparam(pid_t pid, const struct sched_param *param); */ \
-[142] = { "sched_setparam", { UNKNOWN }, UNKNOWN }, \
+[142] = { "sched_setparam", { ID, PTR }, INT }, \
 /*        int sched_getparam(pid_t pid, struct sched_param *param); */ \
-[143] = { "sched_getparam", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[144] = { "sched_setscheduler", { UNKNOWN }, UNKNOWN }, \
+[143] = { "sched_getparam", { ID, PTR }, INT }, \
+/*        int sched_setscheduler(pid_t pid, int policy, const struct sched_param *param); */ \
+[144] = { "sched_setscheduler", { ID, INT, PTR }, INT }, \
 /*        int sched_getscheduler(pid_t pid); */ \
-[145] = { "sched_getscheduler", { UNKNOWN }, UNKNOWN }, \
+[145] = { "sched_getscheduler", { ID }, INT }, \
 /*        int sched_get_priority_max(int policy); */ \
-[146] = { "sched_get_priority_max", { UNKNOWN }, UNKNOWN }, \
+[146] = { "sched_get_priority_max", { INT }, INT }, \
 /*        int sched_get_priority_min(int policy); */ \
-[147] = { "sched_get_priority_min", { UNKNOWN }, UNKNOWN }, \
+[147] = { "sched_get_priority_min", { INT }, INT }, \
 /*        int sched_rr_get_interval(pid_t pid, struct timespec *tp); */ \
-[148] = { "sched_rr_get_interval", { UNKNOWN }, UNKNOWN }, \
-/*        int mlock(const void *addr, size_t len);
-       int mlockall(int flags); */ \
-[149] = { "mlock", { UNKNOWN }, UNKNOWN }, \
-/*        int munlock(const void *addr, size_t len);
-       int munlockall(void); */ \
-[150] = { "munlock", { UNKNOWN }, UNKNOWN }, \
+[148] = { "sched_rr_get_interval", { ID, PTR }, INT }, \
+/*        int mlock(const void *addr, size_t len); */ \
+[149] = { "mlock", { PTR, LONG }, INT }, \
+/*        int munlock(const void *addr, size_t len); */ \
+[150] = { "munlock", { PTR, LONG }, INT }, \
 /*        int mlockall(int flags); */ \
-[151] = { "mlockall", { UNKNOWN }, UNKNOWN }, \
+[151] = { "mlockall", { INT }, INT }, \
 /*        int munlockall(void); */ \
-[152] = { "munlockall", { UNKNOWN }, UNKNOWN }, \
+[152] = { "munlockall", { }, INT }, \
 /*        int vhangup(void); */ \
-[153] = { "vhangup", { UNKNOWN }, UNKNOWN }, \
+[153] = { "vhangup", { }, INT }, \
 /*        int modify_ldt(int func, void *ptr, unsigned long bytecount); */ \
-[154] = { "modify_ldt", { UNKNOWN }, UNKNOWN }, \
+[154] = { "modify_ldt", { INT, PTR, LONG }, INT }, \
 /*        int pivot_root(const char *new_root, const char *put_old); */ \
-[155] = { "pivot_root", { UNKNOWN }, UNKNOWN }, \
+[155] = { "pivot_root", { STR, STR }, INT }, \
 /*        int _sysctl(struct __sysctl_args *args); */ \
-[156] = { "_sysctl", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[157] = { "prctl", { UNKNOWN }, UNKNOWN }, \
-/*        int arch_prctl(int code, unsigned long addr);
-       int arch_prctl(int code, unsigned long *addr); */ \
-[158] = { "arch_prctl", { UNKNOWN }, UNKNOWN }, \
+[156] = { "_sysctl", { PTR }, INT }, \
+/*        int prctl(int option, unsigned long arg2, unsigned long arg3, unsigned long arg4, unsigned long arg5); */ \
+[157] = { "prctl", { INT, LONG, LONG, LONG, LONG }, INT }, \
+/*        int arch_prctl(int code, unsigned long *addr); */ \
+[158] = { "arch_prctl", { INT, PTR }, INT }, \
 /*        int adjtimex(struct timex *buf); */ \
-[159] = { "adjtimex", { UNKNOWN }, UNKNOWN }, \
+[159] = { "adjtimex", { PTR }, INT }, \
 /*        int setrlimit(int resource, const struct rlimit *rlim); */ \
-[160] = { "setrlimit", { UNKNOWN }, UNKNOWN }, \
+[160] = { "setrlimit", { INT, PTR }, INT }, \
 /*        int chroot(const char *path); */ \
-[161] = { "chroot", { UNKNOWN }, UNKNOWN }, \
-/*        void sync(void);
-       int syncfs(int fd); */ \
-[162] = { "sync", { UNKNOWN }, UNKNOWN }, \
+[161] = { "chroot", { STR }, INT }, \
+/*        void sync(void); */ \
+[162] = { "sync", { } }, \
 /*        int acct(const char *filename); */ \
-[163] = { "acct", { UNKNOWN }, UNKNOWN }, \
+[163] = { "acct", { STR }, INT }, \
 /*        int settimeofday(const struct timeval *tv, const struct timezone *tz); */ \
-[164] = { "settimeofday", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[165] = { "mount", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[166] = { "umount2", { UNKNOWN }, UNKNOWN }, \
+[164] = { "settimeofday", { PTR, PTR }, INT }, \
+/*        int mount(const char *source, const char *target, const char *filesystemtype, unsigned long mountflags, const void *data); */ \
+[165] = { "mount", { STR, STR, STR, LONG, PTR }, INT }, \
+/*        int umount2(const char *target, int flags); */ \
+[166] = { "umount2", { STR, INT }, INT }, \
 /*        int swapon(const char *path, int swapflags); */ \
-[167] = { "swapon", { UNKNOWN }, UNKNOWN }, \
+[167] = { "swapon", { STR, INT }, INT }, \
 /*        int swapoff(const char *path); */ \
-[168] = { "swapoff", { UNKNOWN }, UNKNOWN }, \
-/*        int reboot(int magic, int magic2, int cmd, void *arg);
-       int reboot(int cmd); */ \
-[169] = { "reboot", { UNKNOWN }, UNKNOWN }, \
+[168] = { "swapoff", { STR }, INT }, \
+/*        int reboot(int magic, int magic2, int cmd, void *arg); */ \
+[169] = { "reboot", { INT, INT, INT, PTR }, INT }, \
 /*        int sethostname(const char *name, size_t len); */ \
-[170] = { "sethostname", { UNKNOWN }, UNKNOWN }, \
+[170] = { "sethostname", { STR, LONG }, INT }, \
 /*        int setdomainname(const char *name, size_t len); */ \
-[171] = { "setdomainname", { UNKNOWN }, UNKNOWN }, \
+[171] = { "setdomainname", { STR, LONG }, INT }, \
 /*        int iopl(int level); */ \
-[172] = { "iopl", { UNKNOWN }, UNKNOWN }, \
+[172] = { "iopl", { INT }, INT }, \
 /*        int ioperm(unsigned long from, unsigned long num, int turn_on); */ \
-[173] = { "ioperm", { UNKNOWN }, UNKNOWN }, \
+[173] = { "ioperm", { LONG, LONG, INT }, INT }, \
 /*        caddr_t create_module(const char *name, size_t size); */ \
-[174] = { "create_module", { UNKNOWN }, UNKNOWN }, \
-/*        Note: glibc provides no header file declaration of init_module() and no wrapper function for finit_module(); see NOTES. */ \
-[175] = { "init_module", { UNKNOWN }, UNKNOWN }, \
+[174] = { "create_module", { STR, LONG }, UNKNOWN_STRUCT }, \
+/*        int init_module(void *module_image, unsigned long len, const char *param_values); */ \
+[175] = { "init_module", { PTR, LONG, STR }, INT }, \
 /*        int delete_module(const char *name, int flags); */ \
-[176] = { "delete_module", { UNKNOWN }, UNKNOWN }, \
+[176] = { "delete_module", { STR, INT }, INT }, \
 /*        int get_kernel_syms(struct kernel_sym *table); */ \
-[177] = { "get_kernel_syms", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[178] = { "query_module", { UNKNOWN }, UNKNOWN }, \
+[177] = { "get_kernel_syms", { PTR }, INT }, \
+/*        int query_module(const char *name, int which, void *buf, size_t bufsize, size_t *ret); */ \
+[178] = { "query_module", { STR, INT, PTR, LONG, PTR }, INT }, \
 /*        int quotactl(int cmd, const char *special, int id, caddr_t addr); */ \
-[179] = { "quotactl", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[180] = { "nfsservctl", { UNKNOWN }, UNKNOWN }, \
+[179] = { "quotactl", { INT, STR, INT, UNKNOWN_STRUCT }, INT }, \
+/*        long nfsservctl(int cmd, struct nfsctl_arg *argp, union nfsctl_res *resp); */ \
+[180] = { "nfsservctl", { INT, PTR, PTR }, LONG }, \
 /* UNKNOWN PROTOTYPE */ \
 [181] = { "getpmsg", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
@@ -396,42 +375,37 @@
 /* UNKNOWN PROTOTYPE */ \
 [185] = { "security", { UNKNOWN }, UNKNOWN }, \
 /*        pid_t gettid(void); */ \
-[186] = { "gettid", { UNKNOWN }, UNKNOWN }, \
+[186] = { "gettid", { }, ID }, \
 /*        ssize_t readahead(int fd, off64_t offset, size_t count); */ \
-[187] = { "readahead", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[188] = { "setxattr", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[189] = { "lsetxattr", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[190] = { "fsetxattr", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[191] = { "getxattr", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[192] = { "lgetxattr", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[193] = { "fgetxattr", { UNKNOWN }, UNKNOWN }, \
-/*        ssize_t listxattr(const char *path, char *list, size_t size);
-       ssize_t llistxattr(const char *path, char *list, size_t size);
-       ssize_t flistxattr(int fd, char *list, size_t size); */ \
-[194] = { "listxattr", { UNKNOWN }, UNKNOWN }, \
+[187] = { "readahead", { INT, OFF, LONG }, LONG }, \
+/*        int setxattr(const char *path, const char *name, const void *value, size_t size, int flags); */ \
+[188] = { "setxattr", { STR, STR, PTR, LONG, INT }, INT }, \
+/*        int lsetxattr(const char *path, const char *name, const void *value, size_t size, int flags); */ \
+[189] = { "lsetxattr", { STR, STR, PTR, LONG, INT }, INT }, \
+/*        int fsetxattr(int fd, const char *name, const void *value, size_t size, int flags); */ \
+[190] = { "fsetxattr", { INT, STR, PTR, LONG, INT }, INT }, \
+/*        ssize_t getxattr(const char *path, const char *name, void *value, size_t size); */ \
+[191] = { "getxattr", { STR, STR, PTR, LONG }, LONG }, \
+/*        ssize_t lgetxattr(const char *path, const char *name, void *value, size_t size); */ \
+[192] = { "lgetxattr", { STR, STR, PTR, LONG }, LONG }, \
+/*        ssize_t fgetxattr(int fd, const char *name, void *value, size_t size); */ \
+[193] = { "fgetxattr", { INT, STR, PTR, LONG }, LONG }, \
+/*        ssize_t listxattr(const char *path, char *list, size_t size); */ \
+[194] = { "listxattr", { STR, STR, LONG }, LONG }, \
 /*        ssize_t llistxattr(const char *path, char *list, size_t size); */ \
-[195] = { "llistxattr", { UNKNOWN }, UNKNOWN }, \
+[195] = { "llistxattr", { STR, STR, LONG }, LONG }, \
 /*        ssize_t flistxattr(int fd, char *list, size_t size); */ \
-[196] = { "flistxattr", { UNKNOWN }, UNKNOWN }, \
-/*        int removexattr(const char *path, const char *name);
-       int lremovexattr(const char *path, const char *name);
-       int fremovexattr(int fd, const char *name); */ \
-[197] = { "removexattr", { UNKNOWN }, UNKNOWN }, \
+[196] = { "flistxattr", { INT, STR, LONG }, LONG }, \
+/*        int removexattr(const char *path, const char *name); */ \
+[197] = { "removexattr", { STR, STR }, INT }, \
 /*        int lremovexattr(const char *path, const char *name); */ \
-[198] = { "lremovexattr", { UNKNOWN }, UNKNOWN }, \
+[198] = { "lremovexattr", { STR, STR }, INT }, \
 /*        int fremovexattr(int fd, const char *name); */ \
-[199] = { "fremovexattr", { UNKNOWN }, UNKNOWN }, \
-/*        int tkill(int tid, int sig);
-       Note: There is no glibc wrapper for tkill(); see NOTES. */ \
-[200] = { "tkill", { UNKNOWN }, UNKNOWN }, \
+[199] = { "fremovexattr", { INT, STR }, INT }, \
+/*        int tkill(int tid, int sig); */ \
+[200] = { "tkill", { INT, INT }, INT }, \
 /*        time_t time(time_t *tloc); */ \
-[201] = { "time", { UNKNOWN }, UNKNOWN }, \
+[201] = { "time", { PTR }, LONG }, \
 /* UNKNOWN PROTOTYPE */ \
 [202] = { "futex", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
