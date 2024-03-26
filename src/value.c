@@ -7,10 +7,8 @@
 #include <sys/uio.h>
 
 long limit_value(long value, int size) {
-    if (size > (int)sizeof(long))
-        return 0;
-    if (size == (int)sizeof(long))
-        return value;
+    if (size > (int)sizeof(long)) return 0;
+    if (size == (int)sizeof(long)) return value;
 
     long convertore = 1;
     convertore <<= size * 8;
@@ -26,34 +24,38 @@ void *read_data(void *addr, size_t size) {
     };
 
     ssize_t ret = process_vm_readv(child_pid, data, 1, data + 1, 1, 0);
-    if (ret != -1)
-        return data->iov_base;
+    if (ret != -1) return data->iov_base;
 
     free(data->iov_base);
     return NULL;
 }
 
 void print_type(t_type type, long value) {
-    if (type == PTR) return (void)printf("%p", (void *) value);
+    if (type == PTR) return (void)printf("%p", (void *)value);
 
     void *allocated = NULL;
-    if (type == STR) {
-        allocated = read_data((void *) value, 4096);
-        if (allocated != NULL) value = (long) allocated;
-    }
+    if (type == STR) allocated = read_data((void *)value, 4096);
+    if (allocated != NULL) value = (long)allocated;
 
-    if (type == CHAR)
-        printf("%c", (char)value);
-    else if (type == STR)
-        printf("\"%s\"", (char *)value);
-    else if (type == SHORT)
-        printf("%hd", (short)value);
-    else if (type == INT)
-        printf("%d", (int)value);
-    else if (type == LONG)
-        printf("%ld", (long)value);
-    else
-        printf("?");
+    switch (type) {
+        case CHAR:
+            printf("%c", (char)value);
+            break;
+        case STR:
+            printf("\"%s\"", (char *)value);
+            break;
+        case SHORT:
+            printf("%hd", (short)value);
+            break;
+        case INT:
+            printf("%d", (int)value);
+            break;
+        case LONG:
+            printf("%ld", (long)value);
+            break;
+        default:
+            printf("?");
+    }
 
     if (allocated != NULL) free(allocated);
 }
