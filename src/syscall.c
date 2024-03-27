@@ -69,9 +69,13 @@ t_stop *wait_syscall() {
         if (WIFEXITED(status)) {
             stop->status = EXIT;
             stop->ret = WEXITSTATUS(status);
-        } else if (info.si_code == CLD_EXITED) {
+        } else if (WIFSIGNALED(status)) {
+            stop->status = SIGNAL;
+            stop->ret = WTERMSIG(status);
+        } else if (info.si_signo != SIGTRAP) {
             stop->status = SIGNAL;
             stop->ret = info.si_signo;
+            kill(child_pid, SIGKILL);
         } else
             stop->status = RUN;
 

@@ -12,8 +12,8 @@ OBJS	:= $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 # Compiler and linker options
 CC		:= gcc
-CFLAGS	:= -Wall -Wextra -I$(INC_DIR)
-LDFLAGS	:=
+CFLAGS	:= -Wall -Wextra -I$(INC_DIR) -Wno-missing-field-initializers
+LDFLAGS	:= 
 
 # Phony targets
 .PHONY: all clean fclean re
@@ -22,7 +22,7 @@ LDFLAGS	:=
 all: $(NAME)
 
 # Compile source files into object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(shell find $(INC_DIR) -name '*.h')
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -o $@ -c $<
 

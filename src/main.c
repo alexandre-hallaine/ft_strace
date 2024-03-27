@@ -51,4 +51,5 @@ int main(int argc, char *argv[]) {
         printf("+++ exited with %ld +++\n", tmp->ret);
     else
         printf("+++ killed by %s +++\n", strsignal((int)tmp->ret));
+    free(tmp);
 }
