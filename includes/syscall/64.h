@@ -408,180 +408,176 @@
 [201] = { "time", { PTR }, LONG }, \
 /* UNKNOWN PROTOTYPE */ \
 [202] = { "futex", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[203] = { "sched_setaffinity", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[204] = { "sched_getaffinity", { UNKNOWN }, UNKNOWN }, \
-/*        int set_thread_area(struct user_desc *u_info);
-       int set_thread_area(unsigned long tp);
-       int set_thread_area(unsigned long addr); */ \
-[205] = { "set_thread_area", { UNKNOWN }, UNKNOWN }, \
+/*        int sched_setaffinity(pid_t pid, size_t cpusetsize, const cpu_set_t *mask); */ \
+[203] = { "sched_setaffinity", { ID, LONG, PTR }, INT }, \
+/*        int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask); */ \
+[204] = { "sched_getaffinity", { ID, LONG, PTR }, INT }, \
+/*        int set_thread_area(struct user_desc *u_info); */ \
+[205] = { "set_thread_area", { PTR }, INT }, \
 /*        long io_setup(unsigned nr_events, aio_context_t *ctx_idp); */ \
-[206] = { "io_setup", { UNKNOWN }, UNKNOWN }, \
+[206] = { "io_setup", { INT, PTR }, LONG }, \
 /*        int io_destroy(aio_context_t ctx_id); */ \
-[207] = { "io_destroy", { UNKNOWN }, UNKNOWN }, \
+[207] = { "io_destroy", { UNKNOWN_STRUCT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [208] = { "io_getevents", { UNKNOWN }, UNKNOWN }, \
 /*        int io_submit(aio_context_t ctx_id, long nr, struct iocb **iocbpp); */ \
-[209] = { "io_submit", { UNKNOWN }, UNKNOWN }, \
+[209] = { "io_submit", { UNKNOWN_STRUCT, LONG, PTR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [210] = { "io_cancel", { UNKNOWN }, UNKNOWN }, \
-/*        int get_thread_area(struct user_desc *u_info);
-       int get_thread_area(void); */ \
-[211] = { "get_thread_area", { UNKNOWN }, UNKNOWN }, \
+/*        int get_thread_area(struct user_desc *u_info); */ \
+[211] = { "get_thread_area", { PTR }, INT }, \
 /*        int lookup_dcookie(u64 cookie, char *buffer, size_t len); */ \
-[212] = { "lookup_dcookie", { UNKNOWN }, UNKNOWN }, \
+[212] = { "lookup_dcookie", { LONG, STR, LONG }, INT }, \
 /*        int epoll_create(int size); */ \
-[213] = { "epoll_create", { UNKNOWN }, UNKNOWN }, \
+[213] = { "epoll_create", { INT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [214] = { "epoll_ctl_old", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [215] = { "epoll_wait_old", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[216] = { "remap_file_pages", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[217] = { "getdents64", { UNKNOWN }, UNKNOWN }, \
+/*        int remap_file_pages(void addr[.size], size_t size, int prot, size_t pgoff, int flags); */ \
+[216] = { "remap_file_pages", { PTR, LONG, INT, LONG, INT }, INT }, \
+/*        ssize_t getdents64(int fd, void dirp[.count], size_t count); */ \
+[217] = { "getdents64", { INT, PTR, LONG }, LONG }, \
 /*        pid_t set_tid_address(int *tidptr); */ \
-[218] = { "set_tid_address", { UNKNOWN }, UNKNOWN }, \
+[218] = { "set_tid_address", { PTR }, ID }, \
 /*        long restart_syscall(void); */ \
-[219] = { "restart_syscall", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[220] = { "semtimedop", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[221] = { "fadvise64", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[222] = { "timer_create", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[223] = { "timer_settime", { UNKNOWN }, UNKNOWN }, \
+[219] = { "restart_syscall", { }, LONG }, \
+/*        int semtimedop(int semid, struct sembuf *sops, size_t nsops, const struct timespec *_Nullable timeout); */ \
+[220] = { "semtimedop", { INT, PTR, LONG, PTR }, INT }, \
+/*        int posix_fadvise(int fd, off_t offset, off_t len, int advice); */ \
+[221] = { "fadvise64", { INT, OFF, OFF, INT }, INT }, \
+/*        int timer_create(clockid_t clockid, struct sigevent *_Nullable restrict sevp, timer_t *restrict timerid); */ \
+[222] = { "timer_create", { UNKNOWN_STRUCT, PTR, PTR }, INT }, \
+/*        int timer_settime(timer_t timerid, int flags, const struct itimerspec *restrict new_value, struct itimerspec *_Nullable restrict old_value); */ \
+[223] = { "timer_settime", { UNKNOWN_STRUCT, INT, PTR, PTR }, INT }, \
 /*        int timer_gettime(timer_t timerid, struct itimerspec *curr_value); */ \
-[224] = { "timer_gettime", { UNKNOWN }, UNKNOWN }, \
+[224] = { "timer_gettime", { UNKNOWN_STRUCT, PTR }, INT }, \
 /*        int timer_getoverrun(timer_t timerid); */ \
-[225] = { "timer_getoverrun", { UNKNOWN }, UNKNOWN }, \
+[225] = { "timer_getoverrun", { UNKNOWN_STRUCT }, INT }, \
 /*        int timer_delete(timer_t timerid); */ \
-[226] = { "timer_delete", { UNKNOWN }, UNKNOWN }, \
+[226] = { "timer_delete", { UNKNOWN_STRUCT }, INT }, \
 /*        int clock_settime(clockid_t clockid, const struct timespec *tp); */ \
-[227] = { "clock_settime", { UNKNOWN }, UNKNOWN }, \
+[227] = { "clock_settime", { UNKNOWN_STRUCT, PTR }, INT }, \
 /*        int clock_gettime(clockid_t clockid, struct timespec *tp); */ \
-[228] = { "clock_gettime", { UNKNOWN }, UNKNOWN }, \
+[228] = { "clock_gettime", { UNKNOWN_STRUCT, PTR }, INT }, \
 /*        int clock_getres(clockid_t clockid, struct timespec *res); */ \
-[229] = { "clock_getres", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[230] = { "clock_nanosleep", { UNKNOWN }, UNKNOWN }, \
+[229] = { "clock_getres", { UNKNOWN_STRUCT, PTR }, INT }, \
+/*        int clock_nanosleep(clockid_t clockid, int flags, const struct timespec *request, struct timespec *_Nullable remain); */ \
+[230] = { "clock_nanosleep", { UNKNOWN_STRUCT, INT, PTR, PTR }, INT }, \
 /*        void exit_group(int status); */ \
-[231] = { "exit_group", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[232] = { "epoll_wait", { UNKNOWN }, UNKNOWN }, \
+[231] = { "exit_group", { INT } }, \
+/*        int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout); */ \
+[232] = { "epoll_wait", { INT, PTR, INT, INT }, INT }, \
 /*        int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event); */ \
-[233] = { "epoll_ctl", { UNKNOWN }, UNKNOWN }, \
+[233] = { "epoll_ctl", { INT, INT, INT, PTR }, INT }, \
 /*        int tgkill(int tgid, int tid, int sig); */ \
-[234] = { "tgkill", { UNKNOWN }, UNKNOWN }, \
+[234] = { "tgkill", { INT, INT, INT }, INT }, \
 /*        int utimes(const char *filename, const struct timeval times[2]); */ \
-[235] = { "utimes", { UNKNOWN }, UNKNOWN }, \
+[235] = { "utimes", { STR, ARRAY | UNKNOWN_STRUCT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [236] = { "vserver", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[237] = { "mbind", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[238] = { "set_mempolicy", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[239] = { "get_mempolicy", { UNKNOWN }, UNKNOWN }, \
+/*        long mbind(void addr[.len], unsigned long len, int mode, const unsigned long nodemask[(.maxnode + ULONG_WIDTH - 1) / ULONG_WIDTH], unsigned long maxnode, unsigned int flags);*/ \
+[237] = { "mbind", { PTR, LONG, INT, ARRAY | LONG, LONG, INT }, LONG }, \
+/*        long set_mempolicy(int mode, const unsigned long *nodemask, unsigned long maxnode); */ \
+[238] = { "set_mempolicy", { INT, PTR, LONG }, LONG }, \
+/*        long get_mempolicy(int *mode, unsigned long nodemask[(.maxnode + ULONG_WIDTH - 1) / ULONG_WIDTH], unsigned long maxnode, void *addr, unsigned long flags); */ \
+[239] = { "get_mempolicy", { PTR, ARRAY | LONG, LONG, PTR, LONG }, LONG }, \
 /*        mqd_t mq_open(const char *name, int oflag); */ \
-[240] = { "mq_open", { UNKNOWN }, UNKNOWN }, \
+[240] = { "mq_open", { STR, INT }, UNKNOWN_STRUCT }, \
 /*        int mq_unlink(const char *name); */ \
-[241] = { "mq_unlink", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[242] = { "mq_timedsend", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[243] = { "mq_timedreceive", { UNKNOWN }, UNKNOWN }, \
+[241] = { "mq_unlink", { STR }, INT }, \
+/*        int mq_timedsend(mqd_t mqdes, const char msg_ptr[.msg_len], size_t msg_len, unsigned int msg_prio, const struct timespec *abs_timeout); */ \
+[242] = { "mq_timedsend", { UNKNOWN_STRUCT, STR, LONG, INT, PTR }, INT }, \
+/*        ssize_t mq_timedreceive(mqd_t mqdes, char *restrict msg_ptr[.msg_len], size_t msg_len, unsigned int *restrict msg_prio, const struct timespec *restrict abs_timeout); */ \
+[243] = { "mq_timedreceive", { UNKNOWN_STRUCT, STR, LONG, PTR, PTR }, LONG }, \
 /*        int mq_notify(mqd_t mqdes, const struct sigevent *sevp); */ \
-[244] = { "mq_notify", { UNKNOWN }, UNKNOWN }, \
+[244] = { "mq_notify", { UNKNOWN_STRUCT, PTR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [245] = { "mq_getsetattr", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [246] = { "kexec_load", { UNKNOWN }, UNKNOWN }, \
 /*        int waitid(idtype_t idtype, id_t id, siginfo_t *infop, int options); */ \
-[247] = { "waitid", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[248] = { "add_key", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[249] = { "request_key", { UNKNOWN }, UNKNOWN }, \
+[247] = { "waitid", { ID, ID, PTR, INT }, INT }, \
+/*        key_serial_t add_key(const char *type, const char *description, const void payload[.plen], size_t plen, key_serial_t keyring); */ \
+[248] = { "add_key", { STR, STR, PTR, LONG, UNKNOWN_STRUCT }, UNKNOWN_STRUCT }, \
+/*        key_serial_t request_key(const char *type, const char *description, const char *_Nullable callout_info, key_serial_t dest_keyring); */ \
+[249] = { "request_key", { STR, STR, STR, UNKNOWN_STRUCT }, UNKNOWN_STRUCT }, \
 /*        long keyctl(int operation, ...); */ \
-[250] = { "keyctl", { UNKNOWN }, UNKNOWN }, \
+[250] = { "keyctl", { INT, UNKNOWN }, LONG }, \
 /*        int ioprio_set(int which, int who, int ioprio); */ \
-[251] = { "ioprio_set", { UNKNOWN }, UNKNOWN }, \
+[251] = { "ioprio_set", { INT, INT, INT }, INT }, \
 /*        int ioprio_get(int which, int who); */ \
-[252] = { "ioprio_get", { UNKNOWN }, UNKNOWN }, \
+[252] = { "ioprio_get", { INT, INT }, INT }, \
 /*        int inotify_init(void); */ \
-[253] = { "inotify_init", { UNKNOWN }, UNKNOWN }, \
+[253] = { "inotify_init", { }, INT }, \
 /*        int inotify_add_watch(int fd, const char *pathname, uint32_t mask); */ \
-[254] = { "inotify_add_watch", { UNKNOWN }, UNKNOWN }, \
+[254] = { "inotify_add_watch", { INT, STR, INT }, INT }, \
 /*        int inotify_rm_watch(int fd, int wd); */ \
-[255] = { "inotify_rm_watch", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[256] = { "migrate_pages", { UNKNOWN }, UNKNOWN }, \
-/*        int openat(int dirfd, const char *pathname, int flags);
-       int openat(int dirfd, const char *pathname, int flags, mode_t mode); */ \
-[257] = { "openat", { UNKNOWN }, UNKNOWN }, \
+[255] = { "inotify_rm_watch", { INT, INT }, INT }, \
+/*        long migrate_pages(int pid, unsigned long maxnode, const unsigned long *old_nodes, const unsigned long *new_nodes); */ \
+[256] = { "migrate_pages", { INT, LONG, PTR, PTR }, LONG }, \
+/*        int openat(int dirfd, const char *pathname, int flags, mode_t mode); */ \
+[257] = { "openat", { INT, STR, INT, MODE }, INT }, \
 /*        int mkdirat(int dirfd, const char *pathname, mode_t mode); */ \
-[258] = { "mkdirat", { UNKNOWN }, UNKNOWN }, \
+[258] = { "mkdirat", { INT, STR, MODE }, INT }, \
 /*        int mknodat(int dirfd, const char *pathname, mode_t mode, dev_t dev); */ \
-[259] = { "mknodat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[260] = { "fchownat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[261] = { "futimesat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[262] = { "newfstatat", { UNKNOWN }, UNKNOWN }, \
+[259] = { "mknodat", { INT, STR, MODE, DEV }, INT }, \
+/*        int fchownat(int dirfd, const char *pathname, uid_t owner, gid_t group, int flags); */ \
+[260] = { "fchownat", { INT, STR, ID, ID, INT }, INT }, \
+/*        int futimesat(int dirfd, const char *pathname, const struct timeval times[2]); */ \
+[261] = { "futimesat", { INT, STR, ARRAY | UNKNOWN_STRUCT }, INT }, \
+/*        int fstatat(int dirfd, const char *restrict pathname, struct stat *restrict statbuf, int flags); */ \
+[262] = { "newfstatat", { INT, STR, PTR, INT }, INT }, \
 /*        int unlinkat(int dirfd, const char *pathname, int flags); */ \
-[263] = { "unlinkat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[264] = { "renameat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[265] = { "linkat", { UNKNOWN }, UNKNOWN }, \
+[263] = { "unlinkat", { INT, STR, INT }, INT }, \
+/*        int renameat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath); */ \
+[264] = { "renameat", { INT, STR, INT, STR }, INT }, \
+/*        int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags); */ \
+[265] = { "linkat", { INT, STR, INT, STR, INT }, INT }, \
 /*        int symlinkat(const char *target, int newdirfd, const char *linkpath); */ \
-[266] = { "symlinkat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[267] = { "readlinkat", { UNKNOWN }, UNKNOWN }, \
+[266] = { "symlinkat", { STR, INT, STR }, INT }, \
+/*        ssize_t readlinkat(int dirfd, const char *restrict pathname, char *restrict buf, size_t bufsiz); */ \
+[267] = { "readlinkat", { INT, STR, STR, LONG }, LONG }, \
 /*        int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags); */ \
-[268] = { "fchmodat", { UNKNOWN }, UNKNOWN }, \
+[268] = { "fchmodat", { INT, STR, MODE, INT }, INT }, \
 /*        int faccessat(int dirfd, const char *pathname, int mode, int flags); */ \
-[269] = { "faccessat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[270] = { "pselect6", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[271] = { "ppoll", { UNKNOWN }, UNKNOWN }, \
+[269] = { "faccessat", { INT, STR, INT, INT }, INT }, \
+/*        int pselect(int nfds, fd_set *_Nullable restrict readfds, fd_set *_Nullable restrict writefds, fd_set *_Nullable restrict exceptfds, const struct timespec *_Nullable restrict timeout, const sigset_t *_Nullable restrict sigmask); */ \
+[270] = { "pselect6", { INT, PTR, PTR, PTR, PTR, PTR }, INT }, \
+/*        int ppoll(struct pollfd *fds, nfds_t nfds, const struct timespec *_Nullable tmo_p, const sigset_t *_Nullable sigmask); */ \
+[271] = { "ppoll", { PTR, UNKNOWN_STRUCT, PTR, PTR }, INT }, \
 /*        int unshare(int flags); */ \
-[272] = { "unshare", { UNKNOWN }, UNKNOWN }, \
+[272] = { "unshare", { INT }, INT }, \
 /*        long set_robust_list(struct robust_list_head *head, size_t len); */ \
-[273] = { "set_robust_list", { UNKNOWN }, UNKNOWN }, \
+[273] = { "set_robust_list", { PTR, LONG }, LONG }, \
 /* UNKNOWN PROTOTYPE */ \
 [274] = { "get_robust_list", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[275] = { "splice", { UNKNOWN }, UNKNOWN }, \
+/*        ssize_t splice(int fd_in, off64_t *_Nullable off_in, int fd_out, off64_t *_Nullable off_out, size_t len, unsigned int flags); */ \
+[275] = { "splice", { INT, PTR, INT, PTR, LONG, INT }, LONG }, \
 /*        ssize_t tee(int fd_in, int fd_out, size_t len, unsigned int flags); */ \
-[276] = { "tee", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[277] = { "sync_file_range", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[278] = { "vmsplice", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[279] = { "move_pages", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[280] = { "utimensat", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[281] = { "epoll_pwait", { UNKNOWN }, UNKNOWN }, \
+[276] = { "tee", { INT, INT, LONG, INT }, LONG }, \
+/*        int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags); */ \
+[277] = { "sync_file_range", { INT, OFF, OFF, INT }, INT }, \
+/*        ssize_t vmsplice(int fd, const struct iovec *iov, size_t nr_segs, unsigned int flags); */ \
+[278] = { "vmsplice", { INT, PTR, LONG, INT }, LONG }, \
+/*        long move_pages(int pid, unsigned long count, void *pages[.count], const int nodes[.count], int status[.count], int flags); */ \
+[279] = { "move_pages", { INT, LONG, ARRAY | PTR, ARRAY | INT, ARRAY | INT, INT }, LONG }, \
+/*        int utimensat(int dirfd, const char *pathname, const struct timespec times[_Nullable 2], int flags); */ \
+[280] = { "utimensat", { INT, STR, ARRAY | UNKNOWN_STRUCT, INT }, INT }, \
+/*        int epoll_pwait(int epfd, struct epoll_event *events, int maxevents, int timeout, const sigset_t *_Nullable sigmask); */ \
+[281] = { "epoll_pwait", { INT, PTR, INT, INT, PTR }, INT }, \
 /*        int signalfd(int fd, const sigset_t *mask, int flags); */ \
-[282] = { "signalfd", { UNKNOWN }, UNKNOWN }, \
+[282] = { "signalfd", { INT, PTR, INT }, INT }, \
 /*        int timerfd_create(int clockid, int flags); */ \
-[283] = { "timerfd_create", { UNKNOWN }, UNKNOWN }, \
+[283] = { "timerfd_create", { INT, INT }, INT }, \
 /*        int eventfd(unsigned int initval, int flags); */ \
-[284] = { "eventfd", { UNKNOWN }, UNKNOWN }, \
+[284] = { "eventfd", { INT, INT }, INT }, \
 /*        int fallocate(int fd, int mode, off_t offset, off_t len); */ \
-[285] = { "fallocate", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[286] = { "timerfd_settime", { UNKNOWN }, UNKNOWN }, \
+[285] = { "fallocate", { INT, INT, OFF, OFF }, INT }, \
+/*        int timerfd_settime(int fd, int flags, const struct itimerspec *new_value, struct itimerspec *_Nullable old_value); */ \
+[286] = { "timerfd_settime", { INT, INT, PTR, PTR }, INT }, \
 /*        int timerfd_gettime(int fd, struct itimerspec *curr_value); */ \
-[287] = { "timerfd_gettime", { UNKNOWN }, UNKNOWN }, \
+[287] = { "timerfd_gettime", { INT, PTR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [288] = { "accept4", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
