@@ -42,7 +42,7 @@ void print_type(t_type type, long value) {
             printf("%c", (char)value);
             break;
         case STR:
-            if (value == NULL)
+            if (value == 0)
                 printf("%p", (void *)value);
             else
                 printf("\"%s\"", (char *)value);
