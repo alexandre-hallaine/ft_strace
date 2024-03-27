@@ -578,102 +578,102 @@
 [286] = { "timerfd_settime", { INT, INT, PTR, PTR }, INT }, \
 /*        int timerfd_gettime(int fd, struct itimerspec *curr_value); */ \
 [287] = { "timerfd_gettime", { INT, PTR }, INT }, \
-/* UNKNOWN PROTOTYPE */ \
-[288] = { "accept4", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[289] = { "signalfd4", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[290] = { "eventfd2", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[291] = { "epoll_create1", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[292] = { "dup3", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[293] = { "pipe2", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[294] = { "inotify_init1", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[295] = { "preadv", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[296] = { "pwritev", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[297] = { "rt_tgsigqueueinfo", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[298] = { "perf_event_open", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[299] = { "recvmmsg", { UNKNOWN }, UNKNOWN }, \
+/*        int accept4(int sockfd, struct sockaddr *addr, socklen_t *addrlen, int flags); */ \
+[288] = { "accept4", { INT, PTR, PTR, INT }, INT }, \
+/*        int signalfd(int fd, const sigset_t *mask, int flags); */ \
+[289] = { "signalfd4", { INT, PTR, INT }, INT }, \
+/*        int eventfd(unsigned int initval, int flags); */ \
+[290] = { "eventfd2", { INT, INT }, INT }, \
+/*        int epoll_create1(int flags); */ \
+[291] = { "epoll_create1", { INT }, INT }, \
+/*        int dup3(int oldfd, int newfd, int flags); */ \
+[292] = { "dup3", { INT, INT, INT }, INT }, \
+/*        int pipe2(int pipefd[2], int flags); */ \
+[293] = { "pipe2", { ARRAY | INT, INT }, INT }, \
+/*        int inotify_init1(int flags); */ \
+[294] = { "inotify_init1", { INT }, INT }, \
+/*        ssize_t preadv(int fd, const struct iovec *iov, int iovcnt, off_t offset); */ \
+[295] = { "preadv", { INT, PTR, INT, OFF }, LONG }, \
+/*        ssize_t pwritev(int fd, const struct iovec *iov, int iovcnt, off_t offset); */ \
+[296] = { "pwritev", { INT, PTR, INT, OFF }, LONG }, \
+/*        int rt_tgsigqueueinfo(pid_t tgid, pid_t tid, int sig, siginfo_t *info); */ \
+[297] = { "rt_tgsigqueueinfo", { ID, ID, INT, PTR }, INT }, \
+/*        int perf_event_open(struct perf_event_attr *attr, pid_t pid, int cpu, int group_fd, unsigned long flags) */ \
+[298] = { "perf_event_open", { PTR, ID, INT, INT, LONG }, INT }, \
+/*        int recvmmsg(int sockfd, struct mmsghdr *msgvec, unsigned int vlen, int flags, struct timespec *timeout); */ \
+[299] = { "recvmmsg", { INT, PTR, INT, INT, PTR }, INT }, \
 /*        int fanotify_init(unsigned int flags, unsigned int event_f_flags); */ \
-[300] = { "fanotify_init", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[301] = { "fanotify_mark", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[302] = { "prlimit64", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[303] = { "name_to_handle_at", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[304] = { "open_by_handle_at", { UNKNOWN }, UNKNOWN }, \
+[300] = { "fanotify_init", { INT, INT }, INT }, \
+/*        int fanotify_mark(int fanotify_fd, unsigned int flags, uint64_t mask, int dirfd, const char *pathname); */ \
+[301] = { "fanotify_mark", { INT, INT, LONG, INT, STR }, INT }, \
+/*        int prlimit(pid_t pid, int resource, const struct rlimit *new_limit, struct rlimit *old_limit); */ \
+[302] = { "prlimit64", { ID, INT, PTR, PTR }, INT }, \
+/*        int name_to_handle_at(int dirfd, const char *pathname, struct file_handle *handle, int *mount_id, int flags); */ \
+[303] = { "name_to_handle_at", { INT, STR, PTR, PTR, INT }, INT }, \
+/*        int open_by_handle_at(int mount_fd, struct file_handle *handle, int flags); */ \
+[304] = { "open_by_handle_at", { INT, PTR, INT }, INT }, \
 /*        int clock_adjtime(clockid_t clk_id, struct timex *buf); */ \
-[305] = { "clock_adjtime", { UNKNOWN }, UNKNOWN }, \
+[305] = { "clock_adjtime", { UNKNOWN_STRUCT, PTR }, INT }, \
 /*        int syncfs(int fd); */ \
-[306] = { "syncfs", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[307] = { "sendmmsg", { UNKNOWN }, UNKNOWN }, \
+[306] = { "syncfs", { INT }, INT }, \
+/*        int sendmmsg(int sockfd, struct mmsghdr *msgvec, unsigned int vlen, int flags); */ \
+[307] = { "sendmmsg", { INT, PTR, INT, INT }, INT }, \
 /*        int setns(int fd, int nstype); */ \
-[308] = { "setns", { UNKNOWN }, UNKNOWN }, \
+[308] = { "setns", { INT, INT }, INT }, \
 /*        int getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *tcache); */ \
-[309] = { "getcpu", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[310] = { "process_vm_readv", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[311] = { "process_vm_writev", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[312] = { "kcmp", { UNKNOWN }, UNKNOWN }, \
-/*        Note: glibc provides no header file declaration of init_module() and no wrapper function for finit_module(); see NOTES. */ \
-[313] = { "finit_module", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[314] = { "sched_setattr", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[315] = { "sched_getattr", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[316] = { "renameat2", { UNKNOWN }, UNKNOWN }, \
+[309] = { "getcpu", { PTR, PTR, PTR }, INT }, \
+/*        ssize_t process_vm_readv(pid_t pid, const struct iovec *local_iov, unsigned long liovcnt, const struct iovec *remote_iov, unsigned long riovcnt, unsigned long flags); */ \
+[310] = { "process_vm_readv", { ID, PTR, LONG, PTR, LONG, LONG }, LONG }, \
+/*        ssize_t process_vm_writev(pid_t pid, const struct iovec *local_iov, unsigned long liovcnt, const struct iovec *remote_iov, unsigned long riovcnt, unsigned long flags);*/ \
+[311] = { "process_vm_writev", { ID, PTR, LONG, PTR, LONG, LONG }, LONG }, \
+/*        int kcmp(pid_t pid1, pid_t pid2, int type, unsigned long idx1, unsigned long idx2); */ \
+[312] = { "kcmp", { ID, ID, INT, LONG, LONG }, INT }, \
+/*        int finit_module(int fd, const char *param_values, int flags); */ \
+[313] = { "finit_module", { INT, STR, INT }, INT }, \
+/*        int sched_setattr(pid_t pid, struct sched_attr *attr, unsigned int flags); */ \
+[314] = { "sched_setattr", { ID, PTR, INT }, INT }, \
+/*        int sched_getattr(pid_t pid, struct sched_attr *attr, unsigned int size, unsigned int flags); */ \
+[315] = { "sched_getattr", { ID, PTR, INT, INT }, INT }, \
+/*        int renameat2(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, unsigned int flags); */ \
+[316] = { "renameat2", { INT, STR, INT, STR, INT }, INT }, \
 /*        int seccomp(unsigned int operation, unsigned int flags, void *args); */ \
-[317] = { "seccomp", { UNKNOWN }, UNKNOWN }, \
+[317] = { "seccomp", { INT, INT, PTR }, INT }, \
 /*        ssize_t getrandom(void *buf, size_t buflen, unsigned int flags); */ \
-[318] = { "getrandom", { UNKNOWN }, UNKNOWN }, \
+[318] = { "getrandom", { PTR, LONG, INT }, LONG }, \
 /*        int memfd_create(const char *name, unsigned int flags); */ \
-[319] = { "memfd_create", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[320] = { "kexec_file_load", { UNKNOWN }, UNKNOWN }, \
+[319] = { "memfd_create", { STR, INT }, INT }, \
+/*        long kexec_file_load(int kernel_fd, int initrd_fd, unsigned long cmdline_len, const char *cmdline, unsigned long flags); */ \
+[320] = { "kexec_file_load", { INT, INT, LONG, STR, LONG }, LONG }, \
 /*        int bpf(int cmd, union bpf_attr *attr, unsigned int size); */ \
-[321] = { "bpf", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[322] = { "execveat", { UNKNOWN }, UNKNOWN }, \
+[321] = { "bpf", { INT, PTR, INT }, INT }, \
+/*        int execveat(int dirfd, const char *pathname, char *const argv[], char *const envp[], int flags); */ \
+[322] = { "execveat", { INT, STR, ARRAY | STR, ARRAY | STR, INT }, INT }, \
 /*        int userfaultfd(int flags); */ \
-[323] = { "userfaultfd", { UNKNOWN }, UNKNOWN }, \
+[323] = { "userfaultfd", { INT }, INT }, \
 /*        int membarrier(int cmd, unsigned int flags, int cpu_id); */ \
-[324] = { "membarrier", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[325] = { "mlock2", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[326] = { "copy_file_range", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[327] = { "preadv2", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[328] = { "pwritev2", { UNKNOWN }, UNKNOWN }, \
+[324] = { "membarrier", { INT, INT, INT }, INT }, \
+/*        int mlock2(const void *addr, size_t len, int flags); */ \
+[325] = { "mlock2", { PTR, LONG, INT }, INT }, \
+/*        ssize_t copy_file_range(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags); */ \
+[326] = { "copy_file_range", { INT, PTR, INT, PTR, LONG, INT }, LONG }, \
+/*        ssize_t preadv2(int fd, const struct iovec *iov, int iovcnt, off_t offset, int flags); */ \
+[327] = { "preadv2", { INT, PTR, INT, OFF, INT }, LONG }, \
+/*        ssize_t pwritev2(int fd, const struct iovec *iov, int iovcnt, off_t offset, int flags); */ \
+[328] = { "pwritev2", { INT, PTR, INT, OFF, INT }, LONG }, \
 /*        int pkey_mprotect(void *addr, size_t len, int prot, int pkey); */ \
-[329] = { "pkey_mprotect", { UNKNOWN }, UNKNOWN }, \
+[329] = { "pkey_mprotect", { PTR, LONG, INT, INT }, INT }, \
 /*        int pkey_alloc(unsigned int flags, unsigned int access_rights); */ \
-[330] = { "pkey_alloc", { UNKNOWN }, UNKNOWN }, \
+[330] = { "pkey_alloc", { INT, INT }, INT }, \
 /*        int pkey_free(int pkey); */ \
-[331] = { "pkey_free", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[332] = { "statx", { UNKNOWN }, UNKNOWN }, \
+[331] = { "pkey_free", { INT }, INT }, \
+/*        int statx(int dirfd, const char *pathname, int flags, unsigned int mask, struct statx *statxbuf); */ \
+[332] = { "statx", { INT, STR, INT, INT, PTR }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [333] = { "io_pgetevents", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
 [334] = { "rseq", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[424] = { "pidfd_send_signal", { UNKNOWN }, UNKNOWN }, \
+/*        int pidfd_send_signal(int pidfd, int sig, siginfo_t *info, unsigned int flags); */ \
+[424] = { "pidfd_send_signal", { INT, INT, PTR, INT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [425] = { "io_uring_setup", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
@@ -693,17 +693,17 @@
 /* UNKNOWN PROTOTYPE */ \
 [433] = { "fspick", { UNKNOWN }, UNKNOWN }, \
 /*        int pidfd_open(pid_t pid, unsigned int flags); */ \
-[434] = { "pidfd_open", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[435] = { "clone3", { UNKNOWN }, UNKNOWN }, \
+[434] = { "pidfd_open", { ID, INT }, INT }, \
+/*        long clone3(struct clone_args *cl_args, size_t size); */ \
+[435] = { "clone3", { PTR, LONG }, LONG }, \
 /* UNKNOWN PROTOTYPE */ \
 [436] = { "close_range", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[437] = { "openat2", { UNKNOWN }, UNKNOWN }, \
+/*        long openat2(int dirfd, const char *pathname, struct open_how *how, size_t size); */ \
+[437] = { "openat2", { INT, STR, PTR, LONG }, LONG }, \
 /*        int pidfd_getfd(int pidfd, int targetfd, unsigned int flags); */ \
-[438] = { "pidfd_getfd", { UNKNOWN }, UNKNOWN }, \
-/* UNKNOWN PROTOTYPE */ \
-[439] = { "faccessat2", { UNKNOWN }, UNKNOWN }, \
+[438] = { "pidfd_getfd", { INT, INT, INT }, INT }, \
+/*        int faccessat2(int dirfd, const char *pathname, int mode, int flags); */ \
+[439] = { "faccessat2", { INT, STR, INT, INT }, INT }, \
 /* UNKNOWN PROTOTYPE */ \
 [440] = { "process_madvise", { UNKNOWN }, UNKNOWN }, \
 /* UNKNOWN PROTOTYPE */ \
