@@ -26,30 +26,25 @@ int main(int argc, char *argv[]) {
     if (child_pid == 0)
         return child(argv[1], argv + 1);
 
+    ptrace(PTRACE_SEIZE, child_pid, NULL, PTRACE_O_TRACESYSGOOD); // take control of the child
+    waitpid(child_pid, NULL, 0); // wait the kill
+
     sigset_t mask;
     sigfillset(&mask);
     sigprocmask(SIG_SETMASK, &mask, NULL);
 
-    ptrace(PTRACE_SEIZE, child_pid, NULL, PTRACE_O_TRACESYSGOOD); // take control of the child
-    waitpid(child_pid, NULL, 0); // wait the kill
+    int index = 0;
+    t_stop tmp[2] = {0};
 
-    t_stop *tmp = NULL;
-    for (bool first = true;; first = !first) {
-        t_stop *current = wait_syscall();
-        if (!first)
-            print_syscall(tmp, current);
-
-        if (tmp != NULL)
-            free(tmp);
-        tmp = current;
-
-        if (current->status != RUN)
-            break;
+    while (1) {
+        tmp[index] = wait_syscall();
+        if (index) print_syscall(tmp, tmp + 1);
+        if (tmp[index].status != RUN) break;
+        index = !index;
     }
 
-    if (tmp->status == EXIT)
-        printf("+++ exited with %ld +++\n", tmp->ret);
+    if (tmp[index].status == EXIT)
+        printf("+++ exited with %ld +++\n", tmp[index].ret);
     else
-        printf("+++ killed by %s +++\n", strsignal((int)tmp->ret));
-    free(tmp);
+        printf("+++ killed by %s +++\n", strsignal((int)tmp[index].ret));
 }

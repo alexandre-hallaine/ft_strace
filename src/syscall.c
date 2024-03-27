@@ -33,61 +33,52 @@ t_stop stop_32(struct user_regs_struct_32 *regs) {
     };
 }
 
-t_stop *get_stop() {
+void populate_stop(t_stop *stop) {
     union {
         struct user_regs_struct_64 regs_64;
         struct user_regs_struct_32 regs_32;
     } regs;
 
     struct iovec io = { &regs, sizeof(regs) };
-    t_stop *stop = malloc(sizeof(t_stop));
-    
-    if (stop == NULL)
-        return NULL;
-
-    ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io);
+    if (ptrace(PTRACE_GETREGSET, child_pid, NT_PRSTATUS, &io) == -1)
+        return;
 
     if (io.iov_len == sizeof(struct user_regs_struct_64))
         *stop = stop_64(&regs.regs_64);
     else
         *stop = stop_32(&regs.regs_32);
+}
+
+t_stop wait_syscall() {
+    t_stop stop = {0};
+    int status;
+    siginfo_t info;
+
+    ptrace(PTRACE_SYSCALL, child_pid, NULL, NULL);
+    waitpid(child_pid, &status, 0);
+    ptrace(PTRACE_GETSIGINFO, child_pid, NULL, &info);
+
+    if (WIFEXITED(status)) {
+        stop.status = EXIT;
+        stop.ret = WEXITSTATUS(status);
+    } else if (WIFSIGNALED(status)) {
+        stop.status = SIGNAL;
+        stop.ret = WTERMSIG(status);
+    } else if (info.si_signo != SIGTRAP) {
+        stop.status = SIGNAL;
+        stop.ret = info.si_signo;
+        kill(child_pid, SIGKILL);
+    } else {
+        stop.status = RUN;
+        populate_stop(&stop);
+    }
 
     return stop;
 }
 
-t_stop *wait_syscall() {
-    int status;
-    siginfo_t info;
-
-    while (1) {
-        ptrace(PTRACE_SYSCALL, child_pid, NULL, NULL);
-        waitpid(child_pid, &status, 0);
-        ptrace(PTRACE_GETSIGINFO, child_pid, NULL, &info);
-
-        t_stop *stop = get_stop();
-
-        if (WIFEXITED(status)) {
-            stop->status = EXIT;
-            stop->ret = WEXITSTATUS(status);
-        } else if (WIFSIGNALED(status)) {
-            stop->status = SIGNAL;
-            stop->ret = WTERMSIG(status);
-        } else if (info.si_signo != SIGTRAP) {
-            stop->status = SIGNAL;
-            stop->ret = info.si_signo;
-            kill(child_pid, SIGKILL);
-        } else
-            stop->status = RUN;
-
-        if (info.si_signo == SIGTRAP || stop->status != RUN)
-            return stop;
-    }
-}
-
 void print_syscall(t_stop *before, t_stop *after) {
-    if (before->status != RUN)
-        return;
-    if (before->arch != after->arch)
+    if (before->status != RUN) return;
+    if (after->status == RUN && before->arch != after->arch)
         printf("Architecture switched to %s\n", after->arch == ARCH_64 ? "x86_64" : "x86");
 
     printf("%s(", before->syscall->name);
